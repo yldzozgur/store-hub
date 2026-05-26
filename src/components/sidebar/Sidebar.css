@@ -1,0 +1,57 @@
+/* Sidebar'daki her menü maddesinin temel görünümü. */
+.sidebar-link {
+  /* Yazı rengi koyu gri; !important Bootstrap'in default rengini ezmek için. */
+  color: #1f2937 !important;
+  /* Köşeleri hafif yuvarlatıyoruz, modern görünüm için. */
+  border-radius: 8px;
+  /* İç boşluk: dikey 8px, yatay 12px. */
+  padding: 8px 12px !important;
+  /* Aktif durumda kırmızı çizgi için yer ayırıyoruz; normalde şeffaf. */
+  border-bottom: 3px solid transparent;
+  /* Maddeler arasına üstten boşluk. */
+  margin-top: 10px !important;
+  /* Maddeler arasına alttan boşluk. */
+  margin-bottom: 6px !important;
+  /* Hover/aktif geçişleri yumuşak yapmak için animasyon. */
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+/* Fare üstüne geldiğinde maddenin görünümü değişsin. */
+.sidebar-link:hover {
+  /* Arka plana hafif gri ton veriyoruz. */
+  background-color: #e9ecef !important;
+  /* Yazı rengini sabit tutuyoruz; Bootstrap default'unu ezmek için !important. */
+  color: #1f2937 !important;
+}
+
+/* Aktif (seçili) menü maddesinin görünümü. */
+.sidebar-link.active {
+  /* Koyu siyah-gri arka plan; "şu an buradayım" hissini verir. */
+  background-color: #1f2937 !important;
+  /* Yazı beyaz olsun ki koyu arka planda okunabilsin. */
+  color: #fff !important;
+  /* Altta kırmızı vurgu çizgisi; marka rengi. */
+  border-bottom-color: #dc3545 !important;
+}
+
+/* Aktif menüdeki SVG/PNG ikonu beyaza dönüştüren CSS filtresi. */
+.sidebar-link.active img {
+  /* brightness(0) ikonu siyaha çevirir, invert(1) onu beyaza çevirir; net beyaz ikon elde ederiz. */
+  filter: brightness(0) invert(1);
+}
+
+/* Grup başlığı stili (OVERVIEW, SETTINGS gibi). */
+.sidebar-section-title {
+  /* Blok eleman olsun ki kendi satırını alsın. */
+  display: block;
+  /* Üstte yeni gruba görsel boşluk için margin. */
+  margin-top: 20px;
+  /* Başlık ile altındaki ilk madde arasına boşluk. */
+  margin-bottom: 10px;
+  /* Harf aralığını açarak "büyük harf etiket" hissini güçlendiriyoruz. */
+  letter-spacing: 1px;
+  /* Küçük ve okunaklı boyut. */
+  font-size: 13px;
+}

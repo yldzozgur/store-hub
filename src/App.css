@@ -1,0 +1,15 @@
+/* Yıldız (*) selector tüm HTML elementlerini hedefler; aşağıdaki kurallar her elemana uygulanır. */
+* {
+  /* Tarayıcıların elementlere otomatik verdiği dış boşluğu sıfırlıyoruz, sıfırdan kontrol bizde. */
+  margin: 0px;
+  /* İç boşluğu da sıfırlıyoruz; tasarım kayma yaşamasın diye temiz başlangıç. */
+  padding: 0px;
+  /* border ve padding'in element genişliğine DAHİL edilmesini sağlar; boyut hesabı kolaylaşır. */
+  box-sizing: border-box;
+}
+
+/* Sayfanın <body> elementine özel kurallar. */
+body {
+  /* Tüm metinler için varsayılan font: Inter, yoksa sistemin sans-serif fontu kullanılır. */
+  font-family: "Inter", sans-serif;
+}
