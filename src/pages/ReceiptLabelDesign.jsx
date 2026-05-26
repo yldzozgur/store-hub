@@ -1,21 +1,59 @@
-// React kütüphanesini içeri alıyoruz; JSX kullanmak için gerekli.
-import React from "react";
-// Henüz şablon yokken gösterilecek boş durum bileşeni.
+import React, { useState } from "react";
 import EmptyState from "../components/common/EmptyState";
 import NotificationCard from "../components/common/NotificationCard";
 
-// Receipt & Label Design sayfasının ana bileşeni; DashboardLayout'un sağ tarafında render edilir.
 const ReceiptLabelDesign = () => {
+  // 1. Ekran görüntüsündeki 4 bildirimi veri (state) olarak tanımlıyoruz.
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "success",
+      title: "New GateWays Added",
+      subtitle: "0011245672289 - 10:32am",
+    },
+    {
+      id: 2,
+      type: "warning",
+      title: "Low battery level detected",
+      subtitle: "for tag 0011245672289",
+    },
+    {
+      id: 3,
+      type: "info",
+      title: "New Product Added",
+      subtitle: "0011245672289 at 10:32 on 01/11/2025",
+    },
+    {
+      id: 4,
+      type: "error", // NotificationCard'da danger yerine error yazmıştın, onunla eşleşmeli
+      title: "Connection Lost",
+      subtitle: "for tag 0011245672289",
+    },
+  ]);
+
+  // 2. Çarpı (X) butonuna tıklandığında çalışacak silme fonksiyonu
+  const handleClose = (idToRemove) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== idToRemove));
+  };
+
   return (
-    // Sayfanın en dış sarmalayıcı div'i; ileride üstte bildirim şeritleri buraya eklenecek.
     <div>
-      {/* Sayfa başlığı; ileride Topbar'daki başlıkla çakışmaması için kaldırılabilir. */}
-      <NotificationCard />
-      {/* Henüz şablon yokken büyük "Start Designing..." kartını gösterecek bileşen. */}
+      {/* 3. Bildirimleri yan yana dizmek için map kullanıyoruz */}
+      <div className="d-flex flex-wrap gap-3 mb-4">
+        {notifications.map((notification) => (
+          <NotificationCard
+            key={notification.id}
+            type={notification.type}
+            title={notification.title}
+            subtitle={notification.subtitle}
+            onClose={() => handleClose(notification.id)}
+          />
+        ))}
+      </div>
+
       <EmptyState />
     </div>
   );
 };
 
-// Bileşeni dışa açıyoruz; App.jsx içeri alıyor.
 export default ReceiptLabelDesign;
