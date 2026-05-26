@@ -1,17 +1,17 @@
 import React from "react";
 import {
   LuHardDrive,
-  LuBatteryWarning,
+  LuBattery,
   LuBarcode,
-  LuAlertTriangle,
+  LuTriangleAlert,
   LuX,
 } from "react-icons/lu";
 const NotificationCard = ({ type, title, subtitle, onClose }) => {
   const config = {
     success: { color: "#1e8f81", icon: <LuHardDrive size={20} /> },
-    warning: { color: "#f59e0b", icon: <LuBatteryWarning size={20} /> },
+    warning: { color: "#f59e0b", icon: <LuBattery size={20} /> },
     info: { color: "#3b82f6", icon: <LuBarcode size={20} /> },
-    error: { color: "#ef4444", icon: <LuAlertTriangle size={20} /> },
+    error: { color: "#ef4444", icon: <LuTriangleAlert size={20} /> },
   };
   const currentConfig = config[type] || config.info;
 

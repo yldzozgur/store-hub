@@ -61,7 +61,7 @@ const menuSections = [
 // Sol menü bileşenini tanımlıyoruz.
 const Sidebar = () => {
   // Hangi menü maddesinin "aktif" olduğunu hatırlayan state; başlangıçta dashboard seçili.
-  const [activeLink, setActiveLink] = useState("dashboard");
+  const [activeLink, setActiveLink] = useState("receipt-label");
 
   return (
     // pt-3: üstten padding 3; arka plan rengi ve en az tam ekran yüksekliği inline style ile veriliyor.
@@ -89,16 +89,16 @@ const Sidebar = () => {
               className="d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
               style={{ width: 36, height: 36, fontSize: 13 }}
             >
-              NM
+              IF
             </div>
             <div>
               {/* Mağaza adı; kalın ve blok eleman. */}
               <strong className="d-block" style={{ fontSize: 14 }}>
-                Nazar Market
+                International Food
               </strong>
               {/* Lokasyon bilgisi; küçük ve silik. */}
               <small className="text-muted" style={{ fontSize: 12 }}>
-                Location: Downtown
+                Location: Cedar Park
               </small>
             </div>
           </div>
