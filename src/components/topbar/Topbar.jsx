@@ -1,8 +1,8 @@
 // Lucide ikon kütüphanesinden zil ve aşağı-ok ikonlarını içeri alıyoruz.
-import { LuRefreshCw, LuChevronDown } from "react-icons/lu";
+import { LuRefreshCw, LuChevronDown, LuMenu } from "react-icons/lu";
 
 // title prop'unu dışarıdan alıyoruz; başlık metni böylece dinamik olur.
-const Topbar = ({ title, user, onRefresh }) => {
+const Topbar = ({ title, user, onRefresh, onMenuClick }) => {
   const currentUser = user || {
     name: "Hasan Asad Mahdavi",
     role: "Store Manager",
@@ -11,9 +11,15 @@ const Topbar = ({ title, user, onRefresh }) => {
   return (
     // d-flex: flexbox, align-items-center: dikeyde ortala, justify-content-between: iki ucu uçlara yasla, px-4 py-3: iç boşluk, border-bottom: alt çizgi, bg-white: beyaz arka plan.
     <div className="d-flex align-items-center justify-content-between px-4 py-3 border-bottom bg-white">
-      {/* mb-0: alt margin sıfır, fw-semibold: yarı kalın font; ekrana sayfanın başlığını basar. */}
-      <h4 className="mb-0 fw-semibold">{title}</h4>
-      {/* Sağ taraf: bildirim butonu + kullanıcı bilgisi; gap-3 ile aralarına boşluk koyuyoruz. */}
+      <div className="d-flex align-items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="btn btn-light d-md-none p-1 me-2"
+        >
+          <LuMenu size={20} />
+        </button>
+        <h4 className="mb-0 fw-semibold">{title}</h4>
+      </div>
       <div className="d-flex align-items-center gap-3">
         {/* Yuvarlak bildirim butonu; position-relative kırmızı noktayı konumlandırmak için lazım. */}
         <button
@@ -40,7 +46,7 @@ const Topbar = ({ title, user, onRefresh }) => {
             {currentUser.initials}
           </div>
           {/* İsim ve ünvanı yan yana değil üst üste göstermek için ayrı bir div. */}
-          <div>
+          <div className="d-none d-sm-block">
             {/* d-block: blok eleman gibi davransın, font 14px. */}
             <strong className="d-block" style={{ fontSize: 14 }}>
               {currentUser.name}
