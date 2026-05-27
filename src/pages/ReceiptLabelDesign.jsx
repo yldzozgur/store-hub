@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EmptyState from "../components/common/EmptyState";
+import TemplateList from "../components/common/TemplateList";
 import NotificationCard from "../components/common/NotificationCard";
 
 const ReceiptLabelDesign = () => {
@@ -51,7 +51,7 @@ const ReceiptLabelDesign = () => {
         ))}
       </div>
 
-      <EmptyState />
+      <TemplateList />
     </div>
   );
 };
