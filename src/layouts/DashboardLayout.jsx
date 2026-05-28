@@ -8,7 +8,7 @@ import Sidebar from "../components/sidebar/Sidebar";
 import Topbar from "../components/topbar/Topbar";
 
 // children prop'u, bu layout'un içine sarılan başka bileşenleri temsil eder (örn. sayfa içerikleri).
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, activePage, setActivePage }) => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
   return (
     // fluid Container ekranın tam genişliğini kullanır (sabit max-width yok).
@@ -23,13 +23,17 @@ const DashboardLayout = ({ children }) => {
           className="d-none d-md-block bg-light vh-100 sticky-top p-0 border-end"
         >
           {/* Sol menü bileşenini bu sütuna yerleştiriyoruz. */}
-          <Sidebar />
+          <Sidebar activePage={activePage} setActivePage={setActivePage} />
         </Col>
         {/* Sağ sütun: ana içerik alanı; küçükte 8, orta ve üstünde 9 genişliğinde. */}
         <Col xs={12} md={9} className="p-0">
           {/* Üst bar; başlığı prop ile dışarıdan veriyoruz, böylece sayfaya göre değişebilir. */}
           <Topbar
-            title="Receipt & Label Design "
+            title={
+              activePage === "dashboard"
+                ? "Dashboard"
+                : "Receipt & Label Design"
+            }
             onMenuClick={() => setShowMobileMenu(true)}
           />
           {/* p-4: dört bir yandan padding; children burada sayfanın asıl içeriğini gösterir. */}
@@ -45,7 +49,7 @@ const DashboardLayout = ({ children }) => {
           <Offcanvas.Title>Menu</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="p-0 bg-light">
-          <Sidebar />
+          <Sidebar activePage={activePage} setActivePage={setActivePage} />
         </Offcanvas.Body>
       </Offcanvas>
     </Container>

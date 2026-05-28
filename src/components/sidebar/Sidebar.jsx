@@ -59,7 +59,7 @@ const menuSections = [
 ];
 
 // Sol menü bileşenini tanımlıyoruz.
-const Sidebar = () => {
+const Sidebar = ({ activePage, setActivePage }) => {
   // Hangi menü maddesinin "aktif" olduğunu hatırlayan state; başlangıçta dashboard seçili.
   const [activeLink, setActiveLink] = useState("receipt-label");
 
@@ -124,10 +124,10 @@ const Sidebar = () => {
                   // href: tıklayınca url'e # eklenir (ileride router ile değiştirilebilir).
                   href={`#${item.id}`}
                   // Tıklandığında o maddenin id'sini state'e yazıp "aktif" hale getiriyoruz.
-                  onClick={() => setActiveLink(item.id)}
+                  onClick={() => setActivePage(item.id)}
                   // Eğer bu madde aktifse "active" class'ı eklenir; CSS koyu arka plan + kırmızı alt çizgi verir.
                   className={`d-flex align-items-center gap-2 sidebar-link ${
-                    activeLink === item.id ? "active" : ""
+                    activePage === item.id ? "active" : ""
                   }`}
                 >
                   {/* Maddenin sol başındaki ikon. */}
