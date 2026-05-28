@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 import { LuFileText, LuTag, LuFilter, LuPlus } from "react-icons/lu";
-
+import FilterModel from "./FilterModel";
 // Bu dosyada "şimdilik" gerçek veriyi temsil etmesi için örnek bir liste kullanıyoruz.
 // Daha sonra bu liste yerine API'den gelen veri kullanılabilir.
 const mockData = [
@@ -67,7 +67,7 @@ const TemplateList = () => {
   // activeTab: Kullanıcının hangi sekmede olduğunu tutar.
   // Başlangıçta her şeyi gösterelim diye "All" seçili.
   const [activeTab, setActiveTab] = React.useState("All");
-
+  const [showFilterModal, setShowFilterModal] = React.useState(false);
   // activeTab değerine göre mockData içini filtreliyoruz.
   // Sonuç: filteredData, ekranda gösterilecek satırların listesi olur.
   const filteredData = mockData.filter((item) => {
@@ -142,6 +142,7 @@ const TemplateList = () => {
           <Button
             variant="light"
             className="border d-flex align-items-center gap-2 fw-medium text-muted bg-white"
+            onClick={() => setShowFilterModal(true)}
           >
             {/* Filtre ikon */}
             <LuFilter size={16} /> Filter By
@@ -248,6 +249,10 @@ const TemplateList = () => {
           ))}
         </tbody>
       </Table>
+      <FilterModel
+        show={showFilterModal}
+        onHide={() => setShowFilterModal(false)}
+      />
     </div>
   );
 };
