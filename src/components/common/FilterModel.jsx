@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Form, Bagel } from "react-bootstrap";
+import { Modal, Button, Form, Badge } from "react-bootstrap";
 import { LuChevronUp } from "react-icons/lu";
 
 const FilterModel = ({ show, onHide }) => {
