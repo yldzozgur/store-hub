@@ -1,54 +1,75 @@
-// React kütüphanesini içeri alıyoruz; JSX kullanmak için gerekli.
 import React from "react";
-// Bootstrap'in hazır grid bileşenleri: Container = dış kapsayıcı, Row = yatay satır, Col = sütun.
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
-// Sol taraftaki menü bileşeni.
 import Sidebar from "../components/sidebar/Sidebar";
-// Üstteki başlık + bildirim + kullanıcı barı.
 import Topbar from "../components/topbar/Topbar";
 
-// children prop'u, bu layout'un içine sarılan başka bileşenleri temsil eder (örn. sayfa içerikleri).
 const DashboardLayout = ({ children, activePage, setActivePage }) => {
+  // showMobileMenu: mobil menünün açık/kapalı durumunu tutan state
+  // false = kapalı, true = açık
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
+
   return (
-    // fluid Container ekranın tam genişliğini kullanır (sabit max-width yok).
+    // fluid → sayfanın tam genişliğini kullan, kenardan boşluk bırakma
     <Container fluid>
-      {/* Sayfayı yatay bir satıra alıyoruz; içine sütunlar yerleşecek. */}
+      {/* Row → içindeki sütunları yan yana dizer */}
       <Row>
-        {/* Sol sütun: küçük ekranda 12'de 4, orta ekran ve üstünde 12'de 3 genişliğinde. */}
+        {/* ── SOL SÜTUN: SIDEBAR ── */}
         <Col
-          xs={4}
-          md={3}
-          // bg-light: açık arka plan, vh-100: tam ekran yüksekliği, sticky-top: kaydırınca yapışkan kalır, p-0: padding yok, border-end: sağ kenarlık.
-          className="d-none d-md-block bg-light vh-100 sticky-top p-0 border-end"
+          xs={4} // küçük ekranda 12'nin 4'ü kadar yer kapla
+          md={3} // orta ve büyük ekranda 12'nin 3'ü kadar yer kapla
+          className="
+            d-none        // varsayılan olarak GİZLE (mobilde sidebar yok)
+            d-md-block    // orta ekran ve üstünde GÖSTER
+            bg-light      // açık gri arka plan
+            vh-100        // ekranın tam yüksekliği kadar uzasın
+            sticky-top    // sayfa kaydırılınca sidebar yerinde kalsın
+            p-0           // iç boşluk (padding) sıfır
+            border-end    // sağ kenara ince çizgi
+          "
         >
-          {/* Sol menü bileşenini bu sütuna yerleştiriyoruz. */}
+          {/* activePage ve setActivePage → hangi menü maddesi seçili, prop olarak gönderiyoruz */}
           <Sidebar activePage={activePage} setActivePage={setActivePage} />
         </Col>
-        {/* Sağ sütun: ana içerik alanı; küçükte 8, orta ve üstünde 9 genişliğinde. */}
-        <Col xs={12} md={9} className="p-0">
-          {/* Üst bar; başlığı prop ile dışarıdan veriyoruz, böylece sayfaya göre değişebilir. */}
+
+        {/* ── SAĞ SÜTUN: ANA İÇERİK ── */}
+        <Col
+          xs={12} // küçük ekranda tam genişlik (sidebar yok zaten)
+          md={9} // orta ve büyük ekranda 12'nin 9'u
+          className="p-0" // iç boşluk sıfır
+        >
           <Topbar
+            // activePage'e göre başlık metnini dinamik olarak belirliyoruz
+            // Ternary operatör: koşul ? doğruysa : yanlışsa
             title={
               activePage === "dashboard"
                 ? "Dashboard"
                 : "Receipt & Label Design"
             }
+            // Mobilde hamburger butona tıklanınca showMobileMenu'yu true yap → menü açılır
             onMenuClick={() => setShowMobileMenu(true)}
           />
-          {/* p-4: dört bir yandan padding; children burada sayfanın asıl içeriğini gösterir. */}
+
+          {/* p-4 → dört bir yandan padding; children = bu layout'a sarılan sayfa */}
           <div className="p-4">{children}</div>
         </Col>
       </Row>
+
+      {/* ── MOBİL MENÜ (OFFCANVAS) ── */}
+      {/* Offcanvas → ekranın kenarından kayan panel; mobilde sidebar yerine kullanılır */}
       <Offcanvas
-        show={showMobileMenu}
-        onHide={() => setShowMobileMenu(false)}
-        responsive="md"
+        show={showMobileMenu} // true ise panel açık, false ise kapalı
+        onHide={() => setShowMobileMenu(false)} // panel kapanınca state'i false yap
+        responsive="md" // md ve üstü ekranlarda otomatik gizlenir
       >
-        <Offcanvas.Header closeButton className="border-bottom bg-light">
+        <Offcanvas.Header
+          closeButton // sağ üste X butonu ekler
+          className="border-bottom bg-light"
+        >
           <Offcanvas.Title>Menu</Offcanvas.Title>
         </Offcanvas.Header>
+
         <Offcanvas.Body className="p-0 bg-light">
+          {/* Mobil menüde de aynı Sidebar bileşenini kullanıyoruz */}
           <Sidebar activePage={activePage} setActivePage={setActivePage} />
         </Offcanvas.Body>
       </Offcanvas>
@@ -56,5 +77,4 @@ const DashboardLayout = ({ children, activePage, setActivePage }) => {
   );
 };
 
-// Bu bileşeni dışa açıyoruz ki App.jsx içeri alabilsin.
 export default DashboardLayout;
