@@ -1,6 +1,18 @@
 import React from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import { LuArrowLeft } from "react-icons/lu";
+import {
+  LuArrowLeft,
+  LuType,
+  LuImage,
+  LuBarcode,
+  LuMinus,
+  LuColumns2,
+  LuAlignLeft,
+  LuAlignCenter,
+  LuAlignRight,
+  LuSave,
+  LuEye,
+} from "react-icons/lu";
 
 // onBack prop'u, geri butonuna basıldığında bir önceki sayfaya dönmemizi sağlayacak.
 const AddTemplate = ({ onBack }) => {
@@ -31,76 +43,111 @@ const AddTemplate = ({ onBack }) => {
       {/* --- 3 SÜTUNLU ANA GRID YAPISI --- */}
       <Row>
         {/* SOL SÜTUN: Araç Kutusu (12 birimin 3'ünü kaplar) */}
+        {/* SOL SÜTUN: Araç Kutusu (12 birimin 3'ünü kaplar) */}
         <Col md={3}>
           <div className="bg-white border rounded p-3 h-100">
             <h6 className="fw-bold mb-1">Receipt Designer</h6>
+            <p className="text-muted small mb-4">
+              Design your custom receipt layout
+            </p>
+
             <Form.Group className="mb-3">
-              <Form.Label className="fw-medium small">Template *</Form.Label>
-              <Form.Select size="m">
+              <Form.Label className="fw-medium small mb-1">
+                Template *
+              </Form.Label>
+              <Form.Select size="sm" className="shadow-none text-muted">
                 <option>Default Receipt</option>
               </Form.Select>
             </Form.Group>
+
             <Form.Group className="mb-4">
-              <Form.Label className="fw-medium small">Paper Size *</Form.Label>
-              <Form.Select size="sm">
+              <Form.Label className="fw-medium small mb-1">
+                Paper Size *
+              </Form.Label>
+              <Form.Select size="sm" className="shadow-none text-muted">
                 <option>3-inch (80mm)</option>
                 <option>2-inch (58mm)</option>
               </Form.Select>
             </Form.Group>
 
             <p className="fw-medium small mb-2">Add Elements</p>
+            {/* d-grid: İçeriği ızgara yapar. 1fr 1fr: Eşit 2 sütuna böler. */}
             <div
               className="d-grid gap-2 mb-4"
               style={{ gridTemplateColumns: "1fr 1fr" }}
             >
-              <Button variant="light" size="sm" className="border">
-                Text
-              </Button>{" "}
-              <Button variant="light" size="sm" className="border">
-                Image
-              </Button>{" "}
-              <Button variant="light" size="sm" className="border">
-                Barcode
-              </Button>{" "}
-              <Button variant="light" size="sm" className="border">
-                Divider
+              <Button
+                variant="light"
+                size="sm"
+                className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+              >
+                <LuType size={16} /> Text
+              </Button>
+              <Button
+                variant="light"
+                size="sm"
+                className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+              >
+                <LuImage size={16} /> Image
+              </Button>
+              <Button
+                variant="light"
+                size="sm"
+                className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+              >
+                <LuBarcode size={16} /> Barcode
+              </Button>
+              <Button
+                variant="light"
+                size="sm"
+                className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+              >
+                <LuMinus size={16} /> Divider
               </Button>
             </div>
+
             <p className="fw-medium small mb-2">Layout Elements</p>
+            {/* flex-column: Butonları alt alta dizer */}
             <div className="d-flex flex-column gap-2 mb-4">
-              <Button variant="light" size="sm" className="border">
-                2 Column
+              <Button
+                variant="light"
+                size="sm"
+                className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+              >
+                <LuColumns2 size={16} /> 2 Column
               </Button>
-              <Button variant="dark" size="sm">
-                3 Column
+              <Button
+                variant="dark"
+                size="sm"
+                className="d-flex justify-content-center align-items-center gap-2"
+              >
+                <LuColumns2 size={16} /> 3 Column
               </Button>
             </div>
 
             <p className="fw-medium small mb-2">Variables</p>
             <div className="d-flex flex-column gap-2">
-              <Button variant="light" size="sm" className="border">
-                {"{Store_Name}"}
-              </Button>
-              <Button variant="light" size="sm" className="border">
-                {"{Store_Location}"}
-              </Button>
-              <Button variant="light" size="sm" className="border">
-                {"{Date}"}
-              </Button>
-              <Button variant="light" size="sm" className="border">
-                {"{Item}"}
-              </Button>
-              <Button variant="light" size="sm" className="border">
-                {"{Quantity}"}
-              </Button>
-              <Button variant="light" size="sm" className="border">
-                {"{Total}"}
-              </Button>
+              {/* React Zekası: Tek tek 6 tane buton yazmak yerine, bir DİZİ (Array) yapıp .map() ile hepsini tek seferde basıyoruz! */}
+              {[
+                "{Store_Name}",
+                "{Store_Location}",
+                "{Store_Phone}",
+                "{Date}",
+                "{Time}",
+                "{Transaction_ID}",
+              ].map((variable) => (
+                <Button
+                  key={variable}
+                  variant="light"
+                  size="sm"
+                  className="border bg-white text-muted"
+                >
+                  {variable}
+                </Button>
+              ))}
             </div>
           </div>
         </Col>
-
-        {/* ORTA SÜTUN: Önizleme / Tuval (12 birimin 6'sını kaplar) */}
         {/* ORTA SÜTUN: Önizleme / Tuval (12 birimin 6'sını kaplar) */}
         <Col md={6}>
           <div className="bg-light border rounded p-3 h-100 d-flex flex-column align-items-center">
@@ -205,23 +252,98 @@ const AddTemplate = ({ onBack }) => {
         </Col>
 
         {/* SAĞ SÜTUN: Ayarlar (12 birimin 3'ünü kaplar) */}
+        {/* SAĞ SÜTUN: Ayarlar (12 birimin 3'ünü kaplar) */}
         <Col md={3}>
-          <div className="bg-white border rounded p-3 h-100">
+          {/* flex-column: içindeki her şeyi alt alta koyar. h-100 ile boyu %100 olur */}
+          <div className="bg-white border rounded p-3 h-100 d-flex flex-column">
             <h6 className="fw-bold mb-1">Properties</h6>
             <p className="text-muted small mb-4">Manage element properties</p>
 
-            <Form.Group className="mb-3">
-              <Form.Label className="fw-medium small">Content *</Form.Label>
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-medium small mb-1">
+                Content *
+              </Form.Label>
               <Form.Control
                 size="sm"
                 type="text"
                 defaultValue="International Food"
-                placeholder="Enter content"
+                className="shadow-none text-muted mb-1"
               />
               <Form.Text className="text-muted" style={{ fontSize: "11px" }}>
-                Use variables like {"{Store_Name}"},{"{Date}"}
+                Use variables :<br />
+                {"{Store_Name}"}, {"{Date}"}, {"{Time}"}, {"{Item}"} etc.
               </Form.Text>
             </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-medium small mb-1">
+                Font Size *
+              </Form.Label>
+              <Form.Select size="sm" className="shadow-none text-muted">
+                <option>20px</option>
+                <option>16px</option>
+                <option>14px</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label className="fw-medium small mb-1">Style *</Form.Label>
+              <div className="d-flex gap-2">
+                {/* w-50: Her buton satırın %50'sini kaplar */}
+                <Button variant="dark" size="sm" className="w-50 fw-medium">
+                  B Bold
+                </Button>
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="w-50 border bg-white fw-medium text-muted"
+                >
+                  <span className="fst-italic">I</span> Italic
+                </Button>
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-5">
+              <Form.Label className="fw-medium small mb-1">
+                Alignment *
+              </Form.Label>
+              <div className="d-flex gap-2">
+                {/* flex-fill: Alanı eşit paylaşmak için butonların şişmesini sağlar */}
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="flex-fill border bg-white text-muted"
+                >
+                  <LuAlignLeft size={16} />
+                </Button>
+                <Button variant="dark" size="sm" className="flex-fill">
+                  <LuAlignCenter size={16} />
+                </Button>
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="flex-fill border bg-white text-muted"
+                >
+                  <LuAlignRight size={16} />
+                </Button>
+              </div>
+            </Form.Group>
+
+            {/* mt-auto (Margin-Top Auto): Bu çok önemlidir. Kendisinden üstte ne kadar boşluk varsa hepsini ittirerek bu grubu EN ALTA yapıştırır! */}
+            <div className="mt-auto d-flex flex-column gap-2">
+              <Button
+                style={{ backgroundColor: "#1e8f81", border: "none" }}
+                className="d-flex justify-content-center align-items-center gap-2 fw-medium py-2"
+              >
+                <LuSave size={16} /> Save Template
+              </Button>
+              <Button
+                variant="light"
+                className="border d-flex justify-content-center align-items-center gap-2 fw-medium bg-white text-dark py-2"
+              >
+                <LuEye size={16} /> Preview Template
+              </Button>
+            </div>
           </div>
         </Col>
       </Row>
