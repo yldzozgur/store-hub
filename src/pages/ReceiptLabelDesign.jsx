@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import TemplateList from "../components/common/TemplateList";
 import NotificationCard from "../components/common/NotificationCard";
-
+import AddTemplate from "./AddTemplate";
 const ReceiptLabelDesign = () => {
+  const [isAdding, setIsAdding] = useState(false);
   // 1. Ekran görüntüsündeki 4 bildirimi veri (state) olarak tanımlıyoruz.
   const [notifications, setNotifications] = useState([
     {
@@ -35,7 +36,9 @@ const ReceiptLabelDesign = () => {
   const handleClose = (idToRemove) => {
     setNotifications((prev) => prev.filter((n) => n.id !== idToRemove));
   };
-
+  if (isAdding) {
+    return <AddTemplate onBack={() => setIsAdding(false)} />;
+  }
   return (
     <div>
       {/* 3. Bildirimleri yan yana dizmek için map kullanıyoruz */}

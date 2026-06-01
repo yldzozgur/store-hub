@@ -63,7 +63,7 @@ const mockData = [
 
 // TemplateList isminde bir React component oluşturuyoruz.
 // Component, ekranda gösterilecek UI parçalarını üretir.
-const TemplateList = () => {
+const TemplateList = ({ onAdd }) => {
   // activeTab: Kullanıcının hangi sekmede olduğunu tutar.
   // Başlangıçta her şeyi gösterelim diye "All" seçili.
   const [activeTab, setActiveTab] = React.useState("All");
@@ -154,6 +154,7 @@ const TemplateList = () => {
             style={{ backgroundColor: "#1e8f81", border: "none" }}
             // Flex düzen + boşluklar
             className="d-flex align-items-center gap-2 fw-medium"
+            onClick={onAdd}
           >
             {/* Artı ikon */}
             <LuPlus size={16} /> Add Template
