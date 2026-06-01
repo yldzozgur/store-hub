@@ -54,7 +54,7 @@ const ReceiptLabelDesign = () => {
         ))}
       </div>
 
-      <TemplateList />
+      <TemplateList onAdd={() => setIsAdding(true)} />
     </div>
   );
 };

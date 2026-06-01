@@ -38,7 +38,7 @@ const AddTemplate = ({ onBack }) => {
               Design your custom receipt layout
             </p>
 
-            <p className="text-muted">/* Form elemanları buraya gelecek */</p>
+            <p className="text-muted"></p>
           </div>
         </Col>
 
@@ -47,9 +47,7 @@ const AddTemplate = ({ onBack }) => {
           <div className="bg-light border rounded p-3 h-100 d-flex flex-column align-items-center">
             <h6 className="fw-bold mb-3 align-self-start">Preview</h6>
 
-            <p className="text-muted mt-5">
-              /* Fiş önizlemesi buraya gelecek */
-            </p>
+            <p className="text-muted mt-5"></p>
           </div>
         </Col>
 
@@ -59,7 +57,7 @@ const AddTemplate = ({ onBack }) => {
             <h6 className="fw-bold mb-1">Properties</h6>
             <p className="text-muted small mb-4">Manage element properties</p>
 
-            <p className="text-muted">/* Ayarlar buraya gelecek */</p>
+            <p className="text-muted"></p>
           </div>
         </Col>
       </Row>

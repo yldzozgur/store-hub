@@ -59,7 +59,7 @@ const DashboardLayout = ({ children, activePage, setActivePage }) => {
       <Offcanvas
         show={showMobileMenu} // true ise panel açık, false ise kapalı
         onHide={() => setShowMobileMenu(false)} // panel kapanınca state'i false yap
-        responsive="md" // md ve üstü ekranlarda otomatik gizlenir
+        className="d-md-none" // orta ekran ve üstünde GİZLE (sadece mobilde göster)
       >
         <Offcanvas.Header
           closeButton // sağ üste X butonu ekler
