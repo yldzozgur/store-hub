@@ -19,7 +19,8 @@ function App() {
       <DashboardLayout activePage={activePage} setActivePage={setActivePage}>
         {/* DashboardLayout'un içine "children" olarak gönderilen aktif sayfa. */}
 
-        {activePage === "dashboard" ? <EmptyState /> : <ReceiptLabelDesign />}
+        {/* {activePage === "dashboard" ? <EmptyState /> : <ReceiptLabelDesign />} */}
+        <ReceiptLabelDesign />
       </DashboardLayout>
     </>
   );

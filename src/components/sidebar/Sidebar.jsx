@@ -1,20 +1,10 @@
 import "./Sidebar.css";
-import { Nav, Image, Button } from "react-bootstrap";
+import { Nav, Image, Button, Modal, Form } from "react-bootstrap";
 import { useState } from "react";
 
 // Asset imports (logo + ikonlar)
 import logo from "../../assets/logo1.png";
 import dashboardIcon from "../../assets/dashboardIcon.svg";
-import employeeIcon from "../../assets/employeeIcon.svg";
-import inventoryIcon from "../../assets/inventoryIcon.svg";
-import deviceIcon from "../../assets/deviceIcon.svg";
-import reportsIcon from "../../assets/reportsIcon.svg";
-import categoryIcon from "../../assets/categoryIcon.svg";
-import taxIcon from "../../assets/taxIcon.svg";
-import instoreIcon from "../../assets/instoreIcon.svg";
-import storeIcon from "../../assets/storeIcon.svg";
-import logsIcon from "../../assets/logsIcon.svg";
-import receiptIcon from "../../assets/receiptIcon.svg";
 import chevron from "../../assets/chevron.svg";
 
 // ─────────────────────────────────────────
@@ -26,29 +16,11 @@ import chevron from "../../assets/chevron.svg";
 const menuSections = [
   {
     title: "OVERVIEW",
-    items: [{ id: "dashboard", label: "Dashboard", icon: dashboardIcon }],
-  },
-  {
-    title: "STORE MANAGEMENT",
     items: [
-      { id: "employee", label: "Employee Management", icon: employeeIcon },
-      { id: "inventory", label: "Inventory", icon: inventoryIcon },
-      { id: "device", label: "Device Management", icon: deviceIcon },
-      { id: "reports", label: "Reports", icon: reportsIcon },
-    ],
-  },
-  {
-    title: "SETTINGS",
-    items: [
-      { id: "category", label: "Category", icon: categoryIcon },
-      { id: "tax", label: "Tax", icon: taxIcon },
-      { id: "instore-location", label: "In-Store Location", icon: instoreIcon },
-      { id: "store-details", label: "Store Details", icon: storeIcon },
-      { id: "logs", label: "Logs", icon: logsIcon },
       {
-        id: "receipt-label",
-        label: "Receipt & Label Design",
-        icon: receiptIcon,
+        id: "dashboard",
+        label: "Dashboard",
+        icon: dashboardIcon,
       },
     ],
   },
@@ -60,23 +32,26 @@ const menuSections = [
 // setActivePage → tıklanınca aktif sayfayı değiştiren fonksiyon (App.jsx'ten geliyor)
 // ─────────────────────────────────────────
 const Sidebar = ({ activePage, setActivePage }) => {
+  const [showSupportModal, setShowSupportModal] = useState(false);
+  const [supportMethod, setSupportMethod] = useState("email");
+  const [supportContact, setSupportContact] = useState("");
+  const [supportMessage, setSupportMessage] = useState("");
   return (
     // pt-3       → üstten padding
     // minHeight  → sidebar her zaman ekran yüksekliği kadar uzasın
     <div
       className="pt-3"
-      style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
+      style={{ backgroundColor: "#f8f9fa", height: "100vh" }}
     >
-      <div className="px-3 mb-4">
+      <div className="px-3 mb-4 d-flex flex-column" style={{ height: "100%" }}>
         {/* ── LOGO ── */}
         {/* fluid → görseli responsive yap, maxWidth → çok büyük olmasın */}
-        <Image
-          src={logo}
-          alt="Ozgur YILDIZ"
-          fluid
-          className="mb-3"
-          style={{ maxWidth: 140 }}
-        />
+        <h2
+          className="mb-4 text-center"
+          style={{ fontSize: 36, color: "#333" }}
+        >
+          Receipt Studio
+        </h2>
 
         {/* ── MAĞAZA SEÇİCİ KUTU ── */}
         {/* border → çerçeve, rounded → köşe yuvarlat */}
@@ -151,13 +126,87 @@ const Sidebar = ({ activePage, setActivePage }) => {
 
         {/* ── YARDIM KARTI ── */}
         {/* bg-secondary-subtle → açık gri arka plan, mt-4 → üstten boşluk */}
-        <div className="bg-secondary-subtle p-3 mt-4 rounded">
+        <div className="bg-secondary-subtle p-3 mb-4 mt-auto rounded ">
           <h6>Need Help?</h6>
           <p className="small">Feel free to connect</p>
           {/* w-100 → buton sütunun tam genişliğini kaplasın */}
-          <Button variant="dark" className="w-100">
+          <Button
+            variant="dark"
+            className="w-100"
+            onClick={() => setShowSupportModal(true)}
+          >
             Get Support
           </Button>
+
+          {/* Destek modalı */}
+          <Modal
+            show={showSupportModal}
+            onHide={() => setShowSupportModal(false)}
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Contact Support</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Contact method</Form.Label>
+                <div>
+                  <Form.Check
+                    inline
+                    label="Email"
+                    type="radio"
+                    name="supportMethod"
+                    id="support-email"
+                    checked={supportMethod === "email"}
+                    onChange={() => setSupportMethod("email")}
+                  />
+                  <Form.Check
+                    inline
+                    label="Phone"
+                    type="radio"
+                    name="supportMethod"
+                    id="support-phone"
+                    checked={supportMethod === "phone"}
+                    onChange={() => setSupportMethod("phone")}
+                  />
+                </div>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>
+                  {supportMethod === "email" ? "Email address" : "Phone number"}
+                </Form.Label>
+                <Form.Control
+                  type={supportMethod === "email" ? "email" : "tel"}
+                  placeholder={
+                    supportMethod === "email"
+                      ? "example@mail.com"
+                      : "+90 5XX XXX XXXX"
+                  }
+                  value={supportContact}
+                  onChange={(e) => setSupportContact(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Message</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={4}
+                  placeholder="Write your message here..."
+                  value={supportMessage}
+                  onChange={(e) => setSupportMessage(e.target.value)}
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setShowSupportModal(false)}
+              >
+                Close
+              </Button>
+              <Button variant="dark">Send Message</Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </div>
     </div>
