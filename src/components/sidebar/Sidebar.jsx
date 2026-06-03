@@ -36,6 +36,22 @@ const Sidebar = ({ activePage, setActivePage }) => {
   const [supportMethod, setSupportMethod] = useState("email");
   const [supportContact, setSupportContact] = useState("");
   const [supportMessage, setSupportMessage] = useState("");
+
+  const handleSupportSubmit = () => {
+    // Burada destek talebini işleyebiliriz (örneğin, API'ye göndermek)
+    alert(
+      "Support request sent!\\nMethod: " +
+        supportMethod +
+        "\\nContact: " +
+        supportContact +
+        "\\nMessage: " +
+        supportMessage,
+    );
+    setShowSupportModal(false);
+    setSupportMethod("email");
+    setSupportContact("");
+    setSupportMessage("");
+  };
   return (
     // pt-3       → üstten padding
     // minHeight  → sidebar her zaman ekran yüksekliği kadar uzasın
@@ -204,7 +220,9 @@ const Sidebar = ({ activePage, setActivePage }) => {
               >
                 Close
               </Button>
-              <Button variant="dark">Send Message</Button>
+              <Button variant="dark" onClick={handleSupportSubmit}>
+                Send Message
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>
