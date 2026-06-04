@@ -55,3 +55,35 @@
   /* Küçük ve okunaklı boyut. */
   font-size: 13px;
 }
+
+.store-dropdown-toggle {
+  background: #fff;
+  border: 1px solid #111;
+  border-radius: 10px;
+}
+
+.store-dropdown-menu {
+  min-width: 220px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.store-dropdown-header {
+  background: #09221c; /* dark green/teal like design */
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+
+.store-dropdown-item {
+  padding: 0.6rem 0.9rem;
+}
+
+.store-dropdown-item + .dropdown-divider {
+  margin: 0;
+}
+
+.add-store-item {
+  padding: 0.6rem 0.9rem;
+}

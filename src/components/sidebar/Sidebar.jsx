@@ -1,9 +1,10 @@
 import "./Sidebar.css";
-import { Nav, Image, Button, Modal, Form } from "react-bootstrap";
+import { Nav, Image, Button, Modal, Form, Dropdown } from "react-bootstrap";
 import { useState } from "react";
+import React from "react";
+import Toast from "react-bootstrap/Toast";
 
 // Asset imports (logo + ikonlar)
-import logo from "../../assets/logo1.png";
 import dashboardIcon from "../../assets/dashboardIcon.svg";
 import chevron from "../../assets/chevron.svg";
 
@@ -36,28 +37,93 @@ const Sidebar = ({ activePage, setActivePage }) => {
   const [supportMethod, setSupportMethod] = useState("email");
   const [supportContact, setSupportContact] = useState("");
   const [supportMessage, setSupportMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+
+  const stores = [
+    { id: "if", name: "International Food", location: "Cedar Park" },
+    { id: "grocery", name: "Grocery Store", location: "Austin" },
+    { id: "bakery", name: "Bakery Shop", location: "Round Rock" },
+  ];
+  const [selectedStore, setSelectedStore] = useState(stores[0]);
+  const [storeDropdownOpen, setStoreDropdownOpen] = useState(false);
 
   const handleSupportSubmit = () => {
-    // Burada destek talebini işleyebiliriz (örneğin, API'ye göndermek)
-    alert(
-      "Support request sent!\\nMethod: " +
-        supportMethod +
-        "\\nContact: " +
-        supportContact +
-        "\\nMessage: " +
-        supportMessage,
-    );
+    // Hataları temizle
+    const errors = { email: false, phone: false, message: false };
+
+    // Email/Telefon kontrolü
+    if (supportMethod === "email" && !isValidEmail(supportContact)) {
+      errors.email = true;
+    }
+
+    if (supportMethod === "phone" && !isValidPhone(supportContact)) {
+      errors.phone = true;
+    }
+
+    // Mesaj boş mu?
+    if (!supportMessage || supportMessage.trim() === "") {
+      errors.message = true;
+    }
+
+    // Hata varsa göster ve çık
+    if (errors.email || errors.phone || errors.message) {
+      setFormErrors(errors);
+      alert("Please fill out all fields correctly before submitting.");
+      return;
+    }
+
+    // Hata yoksa gönder
+    setShowToast(true);
     setShowSupportModal(false);
     setSupportMethod("email");
     setSupportContact("");
     setSupportMessage("");
+    setFormErrors({ email: false, phone: false, message: false });
+  };
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  const isValidPhone = (phone) => {
+    const phoneRegex = /^(\+1|0)\d{10}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ""));
+  };
+  const [formErrors, setFormErrors] = useState({
+    email: false,
+    phone: false,
+    message: false,
+  });
+  const validateContact = () => {
+    if (supportMethod === "email") {
+      setFormErrors((prev) => ({
+        ...prev,
+        email: !isValidEmail(supportContact),
+        phone: false,
+      }));
+    } else {
+      setFormErrors((prev) => ({
+        ...prev,
+        phone: !isValidPhone(supportContact),
+        email: false,
+      }));
+    }
+  };
+  const validateMessage = () => {
+    setFormErrors((prev) => ({
+      ...prev,
+      message: !supportMessage.trim(),
+    }));
   };
   return (
     // pt-3       → üstten padding
     // minHeight  → sidebar her zaman ekran yüksekliği kadar uzasın
     <div
       className="pt-3"
-      style={{ backgroundColor: "#f8f9fa", height: "100vh" }}
+      style={{
+        backgroundColor: "#f8f9fa",
+        position: "relative",
+        height: "100vh",
+      }}
     >
       <div className="px-3 mb-4 d-flex flex-column" style={{ height: "100%" }}>
         {/* ── LOGO ── */}
@@ -68,38 +134,82 @@ const Sidebar = ({ activePage, setActivePage }) => {
         >
           Receipt Studio
         </h2>
+        <Dropdown
+          className="mx-2 mb-3"
+          show={storeDropdownOpen}
+          onToggle={(isOpen) => setStoreDropdownOpen(isOpen)}
+        >
+          <Dropdown.Toggle
+            as="div"
+            className="store-dropdown-toggle border rounded p-2 d-flex align-items-center justify-content-between gap-2"
+            style={{ cursor: "pointer" }}
+          >
+            <div className="d-flex align-items-center gap-2">
+              <div
+                className="store-initials d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
+                style={{ width: 36, height: 36, fontSize: 13 }}
+              >
+                {selectedStore.initials || "All"}
+              </div>
 
-        {/* ── MAĞAZA SEÇİCİ KUTU ── */}
-        {/* border → çerçeve, rounded → köşe yuvarlat */}
-        {/* d-flex justify-content-between → sol ve sağ içerikleri iki uca dağıt */}
-        <div className="border rounded p-2 mx-2 mb-3 d-flex align-items-center justify-content-between gap-2">
-          {/* Sol taraf: avatar + isim + lokasyon */}
-          <div className="d-flex align-items-center gap-2">
-            {/* Yuvarlak avatar: mağazanın baş harfleri */}
-            {/* rounded-circle → tam yuvarlak, bg-secondary-subtle → açık gri arka plan */}
-            <div
-              className="d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
-              style={{ width: 36, height: 36, fontSize: 13 }}
+              <div>
+                <strong className="d-block" style={{ fontSize: 14 }}>
+                  {selectedStore.name}
+                </strong>
+                {selectedStore.location && (
+                  <small className="text-muted" style={{ fontSize: 12 }}>
+                    Location: {selectedStore.location}
+                  </small>
+                )}
+              </div>
+            </div>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className="p-0 store-dropdown-menu">
+            <Dropdown.Header className="store-dropdown-header">
+              All Stores
+            </Dropdown.Header>
+
+            {stores.slice(1).map((store) => (
+              <Dropdown.Item
+                key={store.id}
+                className="store-dropdown-item"
+                onClick={() => {
+                  setSelectedStore(store);
+                  setStoreDropdownOpen(false);
+                }}
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <div
+                    className="d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
+                    style={{ width: 36, height: 36, fontSize: 13 }}
+                  >
+                    {store.initials}
+                  </div>
+                  <div>
+                    <strong className="d-block">{store.name}</strong>
+                    {store.location && (
+                      <small className="text-muted">{store.location}</small>
+                    )}
+                  </div>
+                </div>
+              </Dropdown.Item>
+            ))}
+
+            <Dropdown.Divider />
+
+            <Dropdown.Item
+              className="d-flex align-items-center gap-2 add-store-item"
+              onClick={() => {
+                // optional: open add-store modal / route
+              }}
             >
-              IF
-            </div>
-
-            <div>
-              {/* d-block → strong kendi satırını alsın */}
-              <strong className="d-block" style={{ fontSize: 14 }}>
-                International Food
-              </strong>
-              {/* text-muted → silik gri renk */}
-              <small className="text-muted" style={{ fontSize: 12 }}>
-                Location: Cedar Park
-              </small>
-            </div>
-          </div>
-
-          {/* Sağ taraf: açılır menü oku */}
-          <Image src={chevron} alt="chevron" width={14} height={14} />
-        </div>
-
+              <span style={{ color: "#198754", fontWeight: 600 }}>
+                + Add Store
+              </span>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         {/* ── MENÜ LİSTESİ ── */}
         {/* flex-column → Nav maddeleri yan yana değil alt alta dizilsin */}
         <Nav className="flex-column px-2">
@@ -195,24 +305,39 @@ const Sidebar = ({ activePage, setActivePage }) => {
                   type={supportMethod === "email" ? "email" : "tel"}
                   placeholder={
                     supportMethod === "email"
-                      ? "example@mail.com"
-                      : "+90 5XX XXX XXXX"
+                      ? "Enter your email"
+                      : "Enter your phone number"
                   }
                   value={supportContact}
                   onChange={(e) => setSupportContact(e.target.value)}
+                  onBlur={() => validateContact()}
+                  style={{
+                    borderColor:
+                      (supportMethod === "email" && formErrors.email) ||
+                      (supportMethod === "phone" && formErrors.phone)
+                        ? "red"
+                        : "",
+                    borderWidth:
+                      (supportMethod === "email" && formErrors.email) ||
+                      (supportMethod === "phone" && formErrors.phone)
+                        ? "2px"
+                        : "1px",
+                  }}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Message</Form.Label>
+                <Form.Label>Message *</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={4}
                   placeholder="Write your message here..."
+                  onBlur={() => validateMessage()}
                   value={supportMessage}
                   onChange={(e) => setSupportMessage(e.target.value)}
                 />
               </Form.Group>
             </Modal.Body>
+
             <Modal.Footer>
               <Button
                 variant="secondary"
@@ -225,6 +350,31 @@ const Sidebar = ({ activePage, setActivePage }) => {
               </Button>
             </Modal.Footer>
           </Modal>
+          {/* Bildirim Alert */}
+          <Toast
+            onClose={() => setShowToast(false)}
+            show={showToast}
+            delay={3000}
+            autohide
+            className="fw-bold text-white border "
+            style={{
+              borderRadius: 15,
+              position: "fixed",
+              backgroundColor: "purple",
+              zIndex: 9999,
+              bottom: 20,
+              right: 20,
+              minWidth: "250px",
+            }}
+          >
+            <Toast.Header className="justify-content-center w-100">
+              <strong className="fw-bold mx-auto">Support Request Sent</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Your support request has been submitted successfully!
+            </Toast.Body>
+          </Toast>
+          {/* Bildirim Alert */}
         </div>
       </div>
     </div>
