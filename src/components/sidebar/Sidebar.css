@@ -56,34 +56,133 @@
   font-size: 13px;
 }
 
+/* ──────────────────────────────────────────────────────────────────────────── */
+/* DROPDOWN STİLLERİ: Mağaza Seçici */
+/* ──────────────────────────────────────────────────────────────────────────── */
+
+/* 
+  .store-dropdown-wrapper: dropdown'ın dış konteyneri
+  - position: relative: alt öğelerin (Menu) positioning referansı olması için
+  - width: 100%: sidebar'ın tam genişliğini kaplasın
+*/
+.store-dropdown-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* 
+  .store-dropdown-toggle: tıklanınca açılan "başlık" (Toggle) kısmı
+  - background: #fff: beyaz arka plan (sidebar gri arka planından kontrastlı)
+  - border: 1px solid #ddd: hafif gri çerçeve (sınır belirt)
+  - border-radius: 10px: köşeleri yuvarla (modern görünüm)
+  - transition: all 0.2s ease: hover efektinin yumuşak geçişi (0.2 saniyede)
+*/
 .store-dropdown-toggle {
   background: #fff;
-  border: 1px solid #111;
+  border: 1px solid #ddd;
   border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
+/* 
+  .store-dropdown-toggle:hover: toggle'ın üzerine fare geldi
+  - background-color: #f5f5f5: çok açık gri (hover görseli = "tıklanabilir")
+  - border-color: #999: gri sınır (daha belirgin = hover durumunu göster)
+  - !important: Bootstrap'in default'unu ezmek için (hover renkleri)
+*/
+.store-dropdown-toggle:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+
+/* 
+  .store-dropdown-menu: açılan dropdown listesi
+  - width: 100% !important: dropdown menüsü toggle'la aynı genişlikte olsun
+    * !important çok önemli: Bootstrap'in min-width ayarını ezmek için
+    * Aksi halde dropdown çok dar kalıyor (toggle'dan daha dar)
+  - border-radius: 8px: köşeleri yuvarla
+  - overflow: hidden: içerik köşelerin dışına taşmasın (yuvarlak efekti korur)
+  - box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1): hafif gölge (dropdown öne çıksın)
+  - margin-top: 4px: toggle'dan 4px aşağıya koy (boşluk = dropdown ayrı görünsün)
+  - border: 1px solid #e0e0e0: hafif çerçeve (sınırını belirt)
+*/
 .store-dropdown-menu {
-  min-width: 220px;
+  width: 100% !important;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+  border: 1px solid #e0e0e0;
 }
 
+/* 
+  .store-dropdown-header: "All Stores" başlık satırı
+  - background: #09221c: koyu yeşil/siyah renk (tasar tarafından istenen renk)
+  - color: #fff: beyaz yazı (koyu arka plan üzerinde okunabilir)
+  - padding: 0.5rem 1rem: dikey 0.5, yatay 1rem iç boşluk
+  - font-weight: 600: kalın yazı (başlık gibi görünsün)
+  - margin: 0: Bootstrap'in default margin'ini kaldır (tasarım kontrolü)
+  - font-size: 14px: biraz büyük başlık boyutu
+*/
 .store-dropdown-header {
-  background: #09221c; /* dark green/teal like design */
+  background: #09221c;
   color: #fff;
   padding: 0.5rem 1rem;
   font-weight: 600;
+  margin: 0;
+  font-size: 14px;
 }
 
+/* 
+  .store-dropdown-item: her mağaza seçeneği
+  - padding: 0.6rem 0.9rem: dikey 0.6, yatay 0.9rem boşluk (tıklama hedefi yeterli)
+  - transition: background-color 0.15s ease: hover rengi yumuşak geçişi
+  - cursor: pointer: fare imleç "tıklanabilir" göster
+*/
 .store-dropdown-item {
   padding: 0.6rem 0.9rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
 }
 
+/* 
+  .store-dropdown-item:hover: mağaza öğesinin üzerine fare geldi
+  - background-color: #f5f5f5: açık gri arka plan ("seçilebilir" hissini verir)
+  - !important: Bootstrap dropdown stili ezmek için
+*/
+.store-dropdown-item:hover {
+  background-color: #f5f5f5 !important;
+}
+
+/* 
+  .store-dropdown-item + .dropdown-divider: mağaza öğesinden sonraki divider
+  - margin: 0: divider'ın etrafındaki boşlukları kaldır
+    * Normalde divider'lar etrafında margin'i olur
+    * Bunu sıfır yaparak divider'ı sıkı yapıyoruz (kompakt görünüm)
+*/
 .store-dropdown-item + .dropdown-divider {
   margin: 0;
 }
 
+/* 
+  .add-store-item: "Add Store" butonu
+  - padding: 0.6rem 0.9rem: diğer öğeler gibi aynı boşluk (uyumlu görünsün)
+  - transition: background-color 0.15s ease: hover rengi yumuşak geçişi
+  - cursor: pointer: tıklanabilir imleç
+*/
 .add-store-item {
   padding: 0.6rem 0.9rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+/* 
+  .add-store-item:hover: "Add Store" butonu hover efekti
+  - background-color: #f0f8f5: çok açık yeşil arka plan
+    * Pozitif aksiyon (ekleme) için yeşil renk tercih
+    * Açık ton = hover efekti ama yazı okunabilir kalır
+  - !important: Bootstrap stili ezmek için
+*/
+.add-store-item:hover {
+  background-color: #f0f8f5 !important;
 }

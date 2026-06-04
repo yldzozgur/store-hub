@@ -40,9 +40,9 @@ const Sidebar = ({ activePage, setActivePage }) => {
   const [showToast, setShowToast] = useState(false);
 
   const stores = [
-    { id: "if", name: "International Food", location: "Cedar Park" },
-    { id: "grocery", name: "Grocery Store", location: "Austin" },
-    { id: "bakery", name: "Bakery Shop", location: "Round Rock" },
+    { initials: "IF", name: "International Food", location: "Cedar Park" },
+    { initials: "GS", name: "Grocery Store", location: "Austin" },
+    { initials: "BS", name: "Bakery Shop", location: "Round Rock" },
   ];
   const [selectedStore, setSelectedStore] = useState(stores[0]);
   const [storeDropdownOpen, setStoreDropdownOpen] = useState(false);
@@ -134,28 +134,79 @@ const Sidebar = ({ activePage, setActivePage }) => {
         >
           Receipt Studio
         </h2>
+        {/* ────────────────────────────────────────────────────────────────────────── */}
+        {/* DROPDOWN: Mağaza Seçici */}
+        {/* ────────────────────────────────────────────────────────────────────────── */}
+
+        {/* 
+  Dropdown: React-Bootstrap bileşeni
+  - Açılır menüleri yönetir (açık/kapalı state)
+  - show={storeDropdownOpen}: dropdown açık mı kontrol et
+  - onToggle: kullanıcı tıkladığında state'i güncelle
+  - className="mx-2 mb-3": soldan/sağdan 2px, alttan 3px margin (sidebar içinde hizalar)
+*/}
         <Dropdown
-          className="mx-2 mb-3"
+          className="mx-2 mb-3 store-dropdown-wrapper"
           show={storeDropdownOpen}
           onToggle={(isOpen) => setStoreDropdownOpen(isOpen)}
         >
+          {/* 
+    Dropdown.Toggle: tıklanınca dropdown menüyü açan "başlık" kısmı
+    - as="div": varsayılan <button> yerine <div> kullan (özel tasarım için)
+    - className="store-dropdown-toggle": CSS'den stil al
+    - border rounded p-2: Bootstrap - çerçeve, yuvarlak köşe, iç boşluk
+    - d-flex align-items-center justify-content-between gap-2:
+      * d-flex: esnek kutu (flex container)
+      * align-items-center: dikey merkezle (avatar + metni ortala)
+      * justify-content-between: solda avatar+metin, sağda ok ikonu
+      * gap-2: aralarına 2 birim boşluk
+    - style={{ cursor: "pointer" }}: fare tıklanabilir imleç göster
+  */}
           <Dropdown.Toggle
             as="div"
             className="store-dropdown-toggle border rounded p-2 d-flex align-items-center justify-content-between gap-2"
             style={{ cursor: "pointer" }}
           >
+            {/* Sol taraf: avatar daire + mağaza adı ve lokasyon */}
+            {/* d-flex: yan yana hizala (avatar sol, metni sağ) */}
+            {/* gap-2: aralarına 2 birim boşluk */}
             <div className="d-flex align-items-center gap-2">
+              {/* 
+        Avatar: mağazanın kısaltması (IF, GS, BS)
+        - rounded-circle: tam yuvarlak şekil (width=height ve border-radius=50%)
+        - bg-secondary-subtle: Bootstrap'in açık gri arka planı
+        - fw-bold: kalın yazı (harfleri daha prominent yap)
+        - d-flex + align-items-center + justify-content-center:
+          * metin tam merkeze yerleştir (yatay ve dikey)
+        - width/height 36px: avatar boyutu
+        - fontSize 13: yazı boyutu
+      */}
               <div
                 className="store-initials d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
                 style={{ width: 36, height: 36, fontSize: 13 }}
               >
-                {selectedStore.initials || "All"}
+                {/* Seçili mağazanın kısaltmasını göster (örn: "IF" International Food için) */}
+                {selectedStore.initials}
               </div>
 
+              {/* Sağ taraf: mağaza adı + lokasyon */}
               <div>
+                {/* 
+          Mağaza adı
+          - strong: kalın yazı (başlık gibi) 
+          - d-block: kendi satırını al (alt alta dizilme için)
+          - fontSize 14: biraz büyük başlık boyu
+        */}
                 <strong className="d-block" style={{ fontSize: 14 }}>
                   {selectedStore.name}
                 </strong>
+
+                {/* 
+          Lokasyon: koşullu göster
+          - {selectedStore.location && ...}: eğer lokasyon varsa göster
+          - text-muted: Bootstrap'in gri rengi ("secondary info" hissini verir)
+          - fontSize 12: küçük, "yan bilgi" boyutu
+        */}
                 {selectedStore.location && (
                   <small className="text-muted" style={{ fontSize: 12 }}>
                     Location: {selectedStore.location}
@@ -163,47 +214,95 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 )}
               </div>
             </div>
+
+            {/* 
+      Sağ taraf: Ok ikonu (chevron)
+      - dropdown açıksa aşağı bakması için CSS'de transform eklenebilir
+      - width="14" height="14": küçük boyut (toggle'ın sağında hoş görünmesi için)
+    */}
           </Dropdown.Toggle>
 
+          {/* 
+    Dropdown.Menu: tıklanınca açılan liste
+    - p-0: padding'i sıfırla (tüm boşluklar CSS'ten gelecek = kontroll sahibi)
+    - className="store-dropdown-menu": CSS stilini uygula
+  */}
           <Dropdown.Menu className="p-0 store-dropdown-menu">
+            {/* 
+      Header: "All Stores" başlığı
+      - Koyu arka plan ve beyaz yazı: "başlık bölümü" görseli
+      - className="store-dropdown-header": CSS'den stil al
+    */}
             <Dropdown.Header className="store-dropdown-header">
               All Stores
             </Dropdown.Header>
 
-            {stores.slice(1).map((store) => (
-              <Dropdown.Item
-                key={store.id}
-                className="store-dropdown-item"
-                onClick={() => {
-                  setSelectedStore(store);
-                  setStoreDropdownOpen(false);
-                }}
-              >
-                <div className="d-flex align-items-center gap-2">
-                  <div
-                    className="d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
-                    style={{ width: 36, height: 36, fontSize: 13 }}
-                  >
-                    {store.initials}
+            {/* 
+      Mağaza listesi
+      - stores.slice(1): ilk mağazayı (zaten seçili olan) atla, kalanını listele
+      - .map((store) => ...): dizideki her mağaza için bir öğe yap
+      - key={store.id}: React'e unique ID ver (verimli güncellemeler için)
+    */}
+            {stores.map((store) => (
+              <>
+                {/* 
+          Her mağaza seçeneği
+          - Dropdown.Item: React-Bootstrap'in liste öğesi
+          - className="store-dropdown-item": CSS'den hover/padding stili al
+          - onClick: tıklandığında:
+            * setSelectedStore(store): bu mağazayı seçili yap
+            * setStoreDropdownOpen(false): dropdown'ı kapat (seçim yapıldı)
+          - key={store.id}: React'e unique kimlik
+        */}
+                <Dropdown.Item
+                  key={store.id}
+                  className="store-dropdown-item"
+                  onClick={() => {
+                    setSelectedStore(store);
+                    setStoreDropdownOpen(false);
+                  }}
+                >
+                  {/* Avatar + mağaza adı/lokasyon: aynı yapı Dropdown.Toggle'daki gibi */}
+                  <div className="d-flex align-items-center gap-2">
+                    <div
+                      className="d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle fw-bold"
+                      style={{ width: 36, height: 36, fontSize: 13 }}
+                    >
+                      {store.initials}
+                    </div>
+                    <div>
+                      <strong className="d-block">{store.name}</strong>
+                      {store.location && (
+                        <small className="text-muted">{store.location}</small>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <strong className="d-block">{store.name}</strong>
-                    {store.location && (
-                      <small className="text-muted">{store.location}</small>
-                    )}
-                  </div>
-                </div>
-              </Dropdown.Item>
+                </Dropdown.Item>
+              </>
             ))}
 
+            {/* 
+      Divider: çizgi
+      - Mağaza listesi ile "Add Store" butonunu ayırır
+      - Dropdown.Divider: Bootstrap'in divider bileşeni
+    */}
             <Dropdown.Divider />
 
+            {/* 
+      "Add Store" butonu
+      - Yeşil renk + "+" ikonu: pozitif aksiyon (ekleme/expansion hissini verir)
+      - className="add-store-item": CSS'den özel stil al
+      - onClick: TODO - yeni mağaza ekleme modalı açmak için yapılacak
+    */}
             <Dropdown.Item
               className="d-flex align-items-center gap-2 add-store-item"
-              onClick={() => {
-                // optional: open add-store modal / route
-              }}
+              onClick={() => {}}
             >
+              {/* 
+        Yeşil yazı
+        - color: "#198754": Bootstrap'in yeşil rengi (success color)
+        - fontWeight: 600: kalın (dikkat çek)
+      */}
               <span style={{ color: "#198754", fontWeight: 600 }}>
                 + Add Store
               </span>
