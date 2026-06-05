@@ -33,6 +33,9 @@ const AddTemplate = ({ onBack }) => {
       type: "text",
       content: "new text",
       fontSize: "16px",
+      isBold: false,
+      isItalic: false,
+      textAlign: "center",
     };
     setElements((prev) => [...prev, newElement]);
   }
@@ -220,8 +223,14 @@ const AddTemplate = ({ onBack }) => {
                 return (
                   <div
                     key={el.id}
-                    className={`mb-2 text-center p-1 rounded ${selectedId === el.id ? "border border-primary" : ""}`}
-                    style={{ cursor: "pointer" }}
+                    className={`mb-2 p-1 rounded ${selectedId === el.id ? "border border-primary" : ""}`}
+                    style={{
+                      cursor: "pointer",
+                      fontSize: el.fontSize ?? "16px",
+                      fontWeight: el.isBold ? "bold" : "normal",
+                      fontStyle: el.isItalic ? "italic" : "normal",
+                      textAlign: el.textAlign ?? "center",
+                    }}
                     onClick={() => setSelectedId(el.id)}
                   >
                     {el.content}
@@ -333,7 +342,9 @@ const AddTemplate = ({ onBack }) => {
                 size="sm"
                 type="text"
                 value={selectedElement?.content ?? ""}
-                onChange={(e) => updateSelectedElement(e.target.value)}
+                onChange={(e) =>
+                  updateSelectedElement("content", e.target.value)
+                }
                 disabled={!selectedElement}
                 placeholder={
                   selectedElement ? "Edit content" : "Select an element to edit"
@@ -350,10 +361,18 @@ const AddTemplate = ({ onBack }) => {
               <Form.Label className="fw-medium small mb-1">
                 Font Size *
               </Form.Label>
-              <Form.Select size="sm" className="shadow-none text-muted">
-                <option>20px</option>
-                <option>16px</option>
-                <option>14px</option>
+              <Form.Select
+                size="sm"
+                className="shadow-none text-muted"
+                value={selectedElement?.fontSize ?? "16px"}
+                onChange={(e) =>
+                  updateSelectedElement("fontSize", e.target.value)
+                }
+                disabled={!selectedElement}
+              >
+                <option value="20px">20px</option>
+                <option value="16px">16px</option>
+                <option value="14px">14px</option>
               </Form.Select>
             </Form.Group>
 
@@ -361,13 +380,28 @@ const AddTemplate = ({ onBack }) => {
               <Form.Label className="fw-medium small mb-1">Style *</Form.Label>
               <div className="d-flex gap-2">
                 {/* w-50: Her buton satırın %50'sini kaplar */}
-                <Button variant="dark" size="sm" className="w-50 fw-medium">
+                <Button
+                  variant={selectedElement?.isBold ? "dark" : "light"}
+                  size="sm"
+                  className="w-50 fw-medium"
+                  onClick={() =>
+                    updateSelectedElement("isBold", !selectedElement?.isBold)
+                  }
+                  disabled={!selectedElement}
+                >
                   B Bold
                 </Button>
                 <Button
-                  variant="light"
+                  variant={selectedElement?.isItalic ? "dark" : "light"}
                   size="sm"
-                  className="w-50 border bg-white fw-medium text-muted"
+                  className="w-50 fw-medium "
+                  disabled={!selectedElement}
+                  onClick={() =>
+                    updateSelectedElement(
+                      "isItalic",
+                      !selectedElement?.isItalic,
+                    )
+                  }
                 >
                   <span className="fst-italic">I</span> Italic
                 </Button>
@@ -381,19 +415,35 @@ const AddTemplate = ({ onBack }) => {
               <div className="d-flex gap-2">
                 {/* flex-fill: Alanı eşit paylaşmak için butonların şişmesini sağlar */}
                 <Button
-                  variant="light"
                   size="sm"
-                  className="flex-fill border bg-white text-muted"
+                  variant={
+                    selectedElement?.textAlign === "left" ? "dark" : "light"
+                  }
+                  className="flex-fill"
+                  disabled={!selectedElement}
+                  onClick={() => updateSelectedElement("textAlign", "left")}
                 >
                   <LuAlignLeft size={16} />
                 </Button>
-                <Button variant="dark" size="sm" className="flex-fill">
+                <Button
+                  size="sm"
+                  variant={
+                    selectedElement?.textAlign === "center" ? "dark" : "light"
+                  }
+                  className="flex-fill"
+                  disabled={!selectedElement}
+                  onClick={() => updateSelectedElement("textAlign", "center")}
+                >
                   <LuAlignCenter size={16} />
                 </Button>
                 <Button
-                  variant="light"
                   size="sm"
-                  className="flex-fill border bg-white text-muted"
+                  variant={
+                    selectedElement?.textAlign === "right" ? "dark" : "light"
+                  }
+                  className="flex-fill"
+                  disabled={!selectedElement}
+                  onClick={() => updateSelectedElement("textAlign", "right")}
                 >
                   <LuAlignRight size={16} />
                 </Button>
