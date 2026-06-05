@@ -6,7 +6,6 @@ import Toast from "react-bootstrap/Toast";
 
 // Asset imports (logo + ikonlar)
 import dashboardIcon from "../../assets/dashboardIcon.svg";
-import chevron from "../../assets/chevron.svg";
 
 // ─────────────────────────────────────────
 // Menü verisi: bileşenin dışında tanımlandı
@@ -118,7 +117,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
     // pt-3       → üstten padding
     // minHeight  → sidebar her zaman ekran yüksekliği kadar uzasın
     <div
-      className="pt-3"
+      className="pt-3 sidebar-container"
       style={{
         backgroundColor: "#f8f9fa",
         position: "relative",
@@ -130,7 +129,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
         {/* fluid → görseli responsive yap, maxWidth → çok büyük olmasın */}
         <h2
           className="mb-4 text-center"
-          style={{ fontSize: 36, color: "#333" }}
+          style={{ fontSize: 22, color: "#333", whiteSpace: "nowrap" }}
         >
           Receipt Studio
         </h2>

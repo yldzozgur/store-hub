@@ -15,28 +15,14 @@ const DashboardLayout = ({ children, activePage, setActivePage }) => {
       <Row>
         {/* ── SOL SÜTUN: SIDEBAR ── */}
         <Col
-          xs={4} // küçük ekranda 12'nin 4'ü kadar yer kapla
-          md={3} // orta ve büyük ekranda 12'nin 3'ü kadar yer kapla
-          className="
-            d-none        // varsayılan olarak GİZLE (mobilde sidebar yok)
-            d-md-block    // orta ekran ve üstünde GÖSTER
-            bg-light      // açık gri arka plan
-            vh-100        // ekranın tam yüksekliği kadar uzasın
-            sticky-top    // sayfa kaydırılınca sidebar yerinde kalsın
-            p-0           // iç boşluk (padding) sıfır
-            border-end    // sağ kenara ince çizgi
-          "
+          xs="auto"
+          className="d-none d-md-block bg-light vh-100 sticky-top p-0 border-end"
         >
           {/* activePage ve setActivePage → hangi menü maddesi seçili, prop olarak gönderiyoruz */}
           <Sidebar activePage={activePage} setActivePage={setActivePage} />
         </Col>
-
         {/* ── SAĞ SÜTUN: ANA İÇERİK ── */}
-        <Col
-          xs={12} // küçük ekranda tam genişlik (sidebar yok zaten)
-          md={9} // orta ve büyük ekranda 12'nin 9'u
-          className="p-0" // iç boşluk sıfır
-        >
+        <Col className="p-0 flex-grow-1" style={{ minWidth: 0 }}>
           <Topbar
             // activePage'e göre başlık metnini dinamik olarak belirliyoruz
             // Ternary operatör: koşul ? doğruysa : yanlışsa

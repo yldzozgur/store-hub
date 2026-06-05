@@ -1,3 +1,9 @@
+.sidebar-container {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
 /* Sidebar'daki her menü maddesinin temel görünümü. */
 .sidebar-link {
   /* Yazı rengi koyu gri; !important Bootstrap'in default rengini ezmek için. */
