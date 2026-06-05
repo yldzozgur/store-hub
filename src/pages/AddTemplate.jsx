@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import {
   LuArrowLeft,
@@ -16,6 +16,37 @@ import {
 
 // onBack prop'u, geri butonuna basıldığında bir önceki sayfaya dönmemizi sağlayacak.
 const AddTemplate = ({ onBack }) => {
+  const [template, setTemplate] = useState("Receipts");
+  const [paperSize, setPaperSize] = useState("3-inch (80mm)");
+  const [elements, setElements] = useState([]);
+const [selectedId, setSelectedId] = useState(null);
+
+const selectedElement=elements.find((el)=>el.id===selectedId);
+function updateSelectedElement(newContent){
+
+setElements((prev)=>
+prev.map((el)=>{
+el.id===selectedId ? {...el, content: newContent} : el
+}));  
+}
+  function addTextElement() {
+    const newElement = {
+      id: Date.now(),
+      type: "text",
+      content: "new text",
+    };
+    setElements((prev) => [...prev, newElement]);
+  }
+
+  function addDividerElement() {
+    const newElement = {
+      id: Date.now(),
+      type: "divider",
+      content: "",
+    };
+    setElements((prev) => [...prev, newElement]);
+  }
+
   return (
     // Container fluid ile ekranın tamamını yatayda kullanıyoruz.
     <Container fluid className="p-0">
@@ -31,10 +62,15 @@ const AddTemplate = ({ onBack }) => {
 
         <div>
           {/* Sağ üstteki butonlar (Şu an sadece görsel) */}
-          <Button variant="dark" className="me-2 fw-medium">
+          <Button variant={template === "Receipts" ? "dark" : "light"}
+           className={`me-2 fw-medium ${template !== 'Receipts' ? 'border bg-white' : ""}`} 
+           onClick={() => setTemplate("Receipts")}
+           >
             Receipts
           </Button>
-          <Button variant="light" className="border fw-medium bg-white">
+          <Button variant={template === "Labels" ? "dark" : "light"}
+className={`fw-medium ${template !== "Labels" ? "border bg-white" : ""}`}
+onClick={() => setTemplate("Labels")}>
             Labels
           </Button>
         </div>
@@ -64,9 +100,13 @@ const AddTemplate = ({ onBack }) => {
               <Form.Label className="fw-medium small mb-1">
                 Paper Size *
               </Form.Label>
-              <Form.Select size="sm" className="shadow-none text-muted">
-                <option>3-inch (80mm)</option>
-                <option>2-inch (58mm)</option>
+              <Form.Select 
+              size="sm" 
+              className="shadow-none text-muted"
+              value={paperSize}
+              onChange={(e) => setPaperSize(e.target.value)}>
+                <option value="3-inch (80mm)">3-inch (80mm)</option>
+                <option value="2-inch (58mm)">2-inch (58mm)</option>
               </Form.Select>
             </Form.Group>
 
@@ -80,6 +120,7 @@ const AddTemplate = ({ onBack }) => {
                 variant="light"
                 size="sm"
                 className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+                onClick={addTextElement}
               >
                 <LuType size={16} /> Text
               </Button>
@@ -101,6 +142,7 @@ const AddTemplate = ({ onBack }) => {
                 variant="light"
                 size="sm"
                 className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+                onClick={addDividerElement}
               >
                 <LuMinus size={16} /> Divider
               </Button>
@@ -162,6 +204,24 @@ const AddTemplate = ({ onBack }) => {
                 fontFamily: "'Courier New', Courier, monospace", // Fiş (daktilo) fontu
               }}
             >
+             {elements.map((el)=>{
+if(el.type === "divider"){
+  return(
+    <hr
+    key={el.id}
+    className="text-secondary my-2"
+    style={{ borderStyle: "dashed", opacity: 0.5 }}
+    />
+  )}
+  return(
+    <div key={el.id}
+    className={`mb-2 text-center p-1 rounded ${selectedId === el.id ? 'border border-primary' : ''}`}
+    style={{cursor: 'pointer'}}
+    onClick={() => setSelectedId(el.id)}>
+    {el.content}
+    </div>
+  )
+             })}
               {/* 1. Fiş Başlığı (Çerçeve İçinde) */}
               <div className="border border-dark text-center fw-bold fs-5 py-2 mb-3 rounded-1">
                 International Foods
@@ -266,7 +326,10 @@ const AddTemplate = ({ onBack }) => {
               <Form.Control
                 size="sm"
                 type="text"
-                defaultValue="International Food"
+value={selectedElement?.content ?? ''}
+onChange={(e) => updateSelectedElement(e.target.value)}
+disabled={!selectedElement}
+placeholder={selectedElement ? 'Edit content' : 'Select an element to edit'}
                 className="shadow-none text-muted mb-1"
               />
               <Form.Text className="text-muted" style={{ fontSize: "11px" }}>
