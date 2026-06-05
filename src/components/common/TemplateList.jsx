@@ -68,22 +68,21 @@ const TemplateList = ({ onAdd }) => {
   // Başlangıçta her şeyi gösterelim diye "All" seçili.
   const [activeTab, setActiveTab] = React.useState("All");
   const [showFilterModal, setShowFilterModal] = React.useState(false);
+  const [selectedStatuses, setSelectedStatuses] = React.useState(["All"]);
   // activeTab değerine göre mockData içini filtreliyoruz.
   // Sonuç: filteredData, ekranda gösterilecek satırların listesi olur.
   const filteredData = mockData.filter((item) => {
-    // "All" seçiliyse hiçbir filtre uygulama, her şeyi göster.
-    if (activeTab === "All") return true;
+    const statusMatch =
+      selectedStatuses.includes("All") ||
+      selectedStatuses.includes(item.status);
 
-    // Sadece Receipt tipi seçildiyse, item.type "Receipt" ise göster.
-    if (activeTab === "Receipts" && item.type === "Receipt") return true;
+    const tabMatch =
+      activeTab === "All" ||
+      (activeTab === "Receipts" && item.type === "Receipt") ||
+      (activeTab === "Labels" && item.type === "Label");
 
-    // Sadece Label tipi seçildiyse, item.type "Label" ise göster.
-    if (activeTab === "Labels" && item.type === "Label") return true;
-
-    // Diğer durumlarda gösterme.
-    return false;
+    return statusMatch && tabMatch;
   });
-
   // Component'in JSX çıktısı: ekranda görünen HTML benzeri yapı.
   return (
     // Bu div, tabloyu ve üstteki butonları kapsayan ana kap.
@@ -253,6 +252,9 @@ const TemplateList = ({ onAdd }) => {
       <FilterModel
         show={showFilterModal}
         onHide={() => setShowFilterModal(false)}
+        selectedStatuses={selectedStatuses}
+        onStatusChange={(statuses) => setSelectedStatuses(statuses)}
+        onClear={() => setSelectedStatuses("All")}
       />
     </div>
   );

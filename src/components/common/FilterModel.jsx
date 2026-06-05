@@ -1,8 +1,26 @@
 import React from "react";
 import { Modal, Button, Form, Badge } from "react-bootstrap";
-import { LuChevronUp } from "react-icons/lu";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 
-const FilterModel = ({ show, onHide }) => {
+const FilterModel = ({
+  show,
+  onHide,
+  selectedStatuses,
+  onStatusChange,
+  onClear,
+}) => {
+  const handleCheckbox = (status) => {
+    if (selectedStatuses.includes(status)) {
+      onStatusChange(selectedStatuses.filter((s) => s !== status));
+    } else {
+      onStatusChange(
+        selectedStatuses.includes("All")
+          ? [status]
+          : [...selectedStatuses.filter((s) => s !== "All"), status],
+      );
+    }
+  };
+
   return (
     <Modal show={show} onHide={onHide} centered size="sm">
       <Modal.Header className="border-bottom-0 pb-0 pt-4 px-4">
@@ -24,9 +42,12 @@ const FilterModel = ({ show, onHide }) => {
 
         <Button
           variant="link"
-          onClick={onHide}
           className="text-decoration-none p-0 fw-medium"
           style={{ color: "#1e8f81", fontSize: "14px" }}
+          onClick={() => {
+            onClear();
+            onHide();
+          }}
         >
           Clear All
         </Button>
@@ -34,23 +55,6 @@ const FilterModel = ({ show, onHide }) => {
 
       <Modal.Body className="px-4 py-4">
         <Form>
-          <Form.Group className="mb-4">
-            <Form.Label
-              className="fw-medium text-dark"
-              style={{ fontSize: "14px" }}
-            >
-              Type
-            </Form.Label>
-            <Form.Select
-              className="text-muted shadow-none"
-              style={{ fontSize: "14px" }}
-            >
-              <option>Select Type</option>
-              <option value="Receipt">Receipt</option>
-              <option value="Label">Label</option>{" "}
-            </Form.Select>
-          </Form.Group>
-
           <Form.Group>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <Form.Label
@@ -59,7 +63,7 @@ const FilterModel = ({ show, onHide }) => {
               >
                 Status
               </Form.Label>
-              <LuChevronUp size={18} className="text-dark" />
+              <LuChevronDown size={18} className="text-dark" />
             </div>
 
             <div
@@ -70,13 +74,16 @@ const FilterModel = ({ show, onHide }) => {
                 type="checkbox"
                 label="All"
                 id="status-all"
-                defaultChecked
+                checked={selectedStatuses.includes("All")}
+                onChange={() => onStatusChange(["All"])}
                 className="text-muted"
               />
               <Form.Check
                 type="checkbox"
                 label="Active"
                 id="status-active"
+                checked={selectedStatuses.includes("Active")}
+                onChange={(e) => handleCheckbox("Active")}
                 className="text-muted"
               />
               <Form.Check
@@ -84,32 +91,29 @@ const FilterModel = ({ show, onHide }) => {
                 label="Inactive"
                 id="status-inactive"
                 className="text-muted"
+                checked={selectedStatuses.includes("Inactive")}
+                onChange={(e) => handleCheckbox("Inactive")}
               />
               <Form.Check
                 type="checkbox"
                 label="Pending"
                 id="status-pending"
                 className="text-muted"
+                checked={selectedStatuses.includes("Pending")}
+                onChange={(e) => handleCheckbox("Pending")}
               />
             </div>
           </Form.Group>
         </Form>
       </Modal.Body>
 
-      <Modal.Footer className="border-top-0 pt-0 pb-4 px-4 d-flex gap-2 flex-nowrap">
+      <Modal.Footer className="border-top-0 pt-0 pb-4 px-4 justify-content-center">
         <Button
           variant="light"
           onClick={onHide}
           className="w-50 border bg-white fw-medium text-dark"
         >
           Cancel
-        </Button>
-
-        <Button
-          className="w-50 border-0 fw-medium"
-          style={{ backgroundColor: "#1e8f81" }}
-        >
-          Apply Filters
         </Button>
       </Modal.Footer>
     </Modal>
