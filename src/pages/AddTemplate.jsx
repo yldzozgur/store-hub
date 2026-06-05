@@ -19,21 +19,20 @@ const AddTemplate = ({ onBack }) => {
   const [template, setTemplate] = useState("Receipts");
   const [paperSize, setPaperSize] = useState("3-inch (80mm)");
   const [elements, setElements] = useState([]);
-const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-const selectedElement=elements.find((el)=>el.id===selectedId);
-function updateSelectedElement(newContent){
-
-setElements((prev)=>
-prev.map((el)=>{
-el.id===selectedId ? {...el, content: newContent} : el
-}));  
-}
+  const selectedElement = elements.find((el) => el.id === selectedId);
+  function updateSelectedElement(field, value) {
+    setElements((prev) =>
+      prev.map((el) => (el.id === selectedId ? { ...el, [field]: value } : el)),
+    );
+  }
   function addTextElement() {
     const newElement = {
       id: Date.now(),
       type: "text",
       content: "new text",
+      fontSize: "16px",
     };
     setElements((prev) => [...prev, newElement]);
   }
@@ -62,15 +61,18 @@ el.id===selectedId ? {...el, content: newContent} : el
 
         <div>
           {/* Sağ üstteki butonlar (Şu an sadece görsel) */}
-          <Button variant={template === "Receipts" ? "dark" : "light"}
-           className={`me-2 fw-medium ${template !== 'Receipts' ? 'border bg-white' : ""}`} 
-           onClick={() => setTemplate("Receipts")}
-           >
+          <Button
+            variant={template === "Receipts" ? "dark" : "light"}
+            className={`me-2 fw-medium ${template !== "Receipts" ? "border bg-white" : ""}`}
+            onClick={() => setTemplate("Receipts")}
+          >
             Receipts
           </Button>
-          <Button variant={template === "Labels" ? "dark" : "light"}
-className={`fw-medium ${template !== "Labels" ? "border bg-white" : ""}`}
-onClick={() => setTemplate("Labels")}>
+          <Button
+            variant={template === "Labels" ? "dark" : "light"}
+            className={`fw-medium ${template !== "Labels" ? "border bg-white" : ""}`}
+            onClick={() => setTemplate("Labels")}
+          >
             Labels
           </Button>
         </div>
@@ -100,11 +102,12 @@ onClick={() => setTemplate("Labels")}>
               <Form.Label className="fw-medium small mb-1">
                 Paper Size *
               </Form.Label>
-              <Form.Select 
-              size="sm" 
-              className="shadow-none text-muted"
-              value={paperSize}
-              onChange={(e) => setPaperSize(e.target.value)}>
+              <Form.Select
+                size="sm"
+                className="shadow-none text-muted"
+                value={paperSize}
+                onChange={(e) => setPaperSize(e.target.value)}
+              >
                 <option value="3-inch (80mm)">3-inch (80mm)</option>
                 <option value="2-inch (58mm)">2-inch (58mm)</option>
               </Form.Select>
@@ -204,24 +207,27 @@ onClick={() => setTemplate("Labels")}>
                 fontFamily: "'Courier New', Courier, monospace", // Fiş (daktilo) fontu
               }}
             >
-             {elements.map((el)=>{
-if(el.type === "divider"){
-  return(
-    <hr
-    key={el.id}
-    className="text-secondary my-2"
-    style={{ borderStyle: "dashed", opacity: 0.5 }}
-    />
-  )}
-  return(
-    <div key={el.id}
-    className={`mb-2 text-center p-1 rounded ${selectedId === el.id ? 'border border-primary' : ''}`}
-    style={{cursor: 'pointer'}}
-    onClick={() => setSelectedId(el.id)}>
-    {el.content}
-    </div>
-  )
-             })}
+              {elements.map((el) => {
+                if (el.type === "divider") {
+                  return (
+                    <hr
+                      key={el.id}
+                      className="text-secondary my-2"
+                      style={{ borderStyle: "dashed", opacity: 0.5 }}
+                    />
+                  );
+                }
+                return (
+                  <div
+                    key={el.id}
+                    className={`mb-2 text-center p-1 rounded ${selectedId === el.id ? "border border-primary" : ""}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSelectedId(el.id)}
+                  >
+                    {el.content}
+                  </div>
+                );
+              })}
               {/* 1. Fiş Başlığı (Çerçeve İçinde) */}
               <div className="border border-dark text-center fw-bold fs-5 py-2 mb-3 rounded-1">
                 International Foods
@@ -326,10 +332,12 @@ if(el.type === "divider"){
               <Form.Control
                 size="sm"
                 type="text"
-value={selectedElement?.content ?? ''}
-onChange={(e) => updateSelectedElement(e.target.value)}
-disabled={!selectedElement}
-placeholder={selectedElement ? 'Edit content' : 'Select an element to edit'}
+                value={selectedElement?.content ?? ""}
+                onChange={(e) => updateSelectedElement(e.target.value)}
+                disabled={!selectedElement}
+                placeholder={
+                  selectedElement ? "Edit content" : "Select an element to edit"
+                }
                 className="shadow-none text-muted mb-1"
               />
               <Form.Text className="text-muted" style={{ fontSize: "11px" }}>
