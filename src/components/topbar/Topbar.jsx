@@ -63,7 +63,7 @@ const Topbar = ({ title, user, onRefresh, onMenuClick }) => {
         className="d-flex align-items-center gap-3"
         style={{ overflow: "visible" }}
       >
-        <div className="position-relative topbar-dropdown">
+        <div className="position-relative topbar-dropdown  ">
           {/* Yuvarlak bildirim butonu; position-relative kırmızı noktayı konumlandırmak için lazım. */}
           <button
             onClick={() => {
@@ -78,8 +78,14 @@ const Topbar = ({ title, user, onRefresh, onMenuClick }) => {
             <LuRefreshCw size={18} />
             {/* Sağ üst köşede kırmızı bildirim noktası; position-absolute ile parent'a göre konumlanır. */}
             <span
-              className="position-absolute bg-danger rounded-circle"
-              style={{ width: 8, height: 8, top: 6, right: 6 }}
+              className="position-absolute bg-danger rounded-circle notification-pulse"
+              style={{
+                width: 8,
+                height: 8,
+                top: 6,
+                right: 6,
+                display: "block",
+              }}
             />
           </button>
           {showNotifications && (
@@ -98,7 +104,7 @@ const Topbar = ({ title, user, onRefresh, onMenuClick }) => {
                 overflow: "visible",
               }}
             >
-              <div className="p-3 border-bottom">
+              <div className="p-3 border-bottom ">
                 <strong>Notifications</strong>
                 <span className="text-muted small ms-2">50 unread</span>
               </div>
