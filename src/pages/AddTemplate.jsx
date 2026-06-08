@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import {
   LuArrowLeft,
@@ -22,6 +22,23 @@ const AddTemplate = ({ onBack }) => {
   const [selectedId, setSelectedId] = useState(null);
 
   const selectedElement = elements.find((el) => el.id === selectedId);
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === "Delete" || e.key === "Backspace") {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+          return;
+        }
+        setElements((prev) => prev.filter((el) => el.id !== selectedId));
+        setSelectedId(null);
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedId]);
+
   function updateSelectedElement(field, value) {
     setElements((prev) =>
       prev.map((el) => (el.id === selectedId ? { ...el, [field]: value } : el)),
@@ -189,6 +206,13 @@ const AddTemplate = ({ onBack }) => {
                   variant="light"
                   size="sm"
                   className="border bg-white text-muted"
+                  disabled={!selectedElement}
+                  onClick={() =>
+                    updateSelectedElement(
+                      "content",
+                      (selectedElement?.content ?? "") + variable,
+                    )
+                  }
                 >
                   {variable}
                 </Button>
@@ -213,11 +237,20 @@ const AddTemplate = ({ onBack }) => {
               {elements.map((el) => {
                 if (el.type === "divider") {
                   return (
-                    <hr
+                    <div
                       key={el.id}
-                      className="text-secondary my-2"
-                      style={{ borderStyle: "dashed", opacity: 0.5 }}
-                    />
+                      onClick={() => setSelectedId(el.id)}
+                      className={`my-2 rounded ${selectedId === el.id ? "border border-primary p-1" : ""}`}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <hr
+                        style={{
+                          borderStyle: "dashed",
+                          opacity: 0.5,
+                          margin: 0,
+                        }}
+                      />
+                    </div>
                   );
                 }
                 return (
