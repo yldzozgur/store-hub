@@ -3,7 +3,7 @@ import { Table, Button } from "react-bootstrap";
 import { LuFileText, LuTag, LuFilter, LuPlus } from "react-icons/lu";
 import FilterModel from "./FilterModel";
 
-const TemplateList = ({ templates, onAdd }) => {
+const TemplateList = ({ templates, onAdd, onEdit }) => {
   // activeTab: Kullanıcının hangi sekmede olduğunu tutar.
   // Başlangıçta her şeyi gösterelim diye "All" seçili.
   const [activeTab, setActiveTab] = React.useState("All");
@@ -113,6 +113,7 @@ const TemplateList = ({ templates, onAdd }) => {
             <th className="fw-medium">Status</th>
             <th className="fw-medium">Devices Using</th>
             <th className="fw-medium">Last Modified</th>
+            <th className="fw-medium">Action</th>
           </tr>
         </thead>
 
@@ -185,6 +186,15 @@ const TemplateList = ({ templates, onAdd }) => {
 
               {/* Last Modified sütunu */}
               <td className="text-muted">{item.modified}</td>
+              <td>
+                <Button
+                  className="text-primary p-0 text-decoration-none fw-medium"
+                  variant="link"
+                  onClick={() => onEdit(item)}
+                >
+                  Edit
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>

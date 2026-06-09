@@ -27,7 +27,8 @@ const initialMockData = [
 
 const ReceiptLabelDesign = () => {
   const [isAdding, setIsAdding] = useState(false);
-
+  // Düzenlenecek olan şablonu tutacağımız state
+  const [editingTemplate, setEditingTemplate] = useState(null);
   // 1. Şablonlarımızı tutacağımız ANA STATE (Veri Deposu)
   const [templates, setTemplates] = useState(initialMockData);
 
@@ -87,6 +88,8 @@ const ReceiptLabelDesign = () => {
   if (isAdding) {
     return (
       <AddTemplate
+        initialData={editingTemplate}
+        setEditingTemplate={null}
         onBack={() => setIsAdding(false)}
         onSave={handleSaveTemplate} // <-- Kaydetme fonksiyonunu prop olarak gönderdik!
       />
@@ -111,7 +114,14 @@ const ReceiptLabelDesign = () => {
       {/* Tabloya verilerimizi gönderiyoruz */}
       <TemplateList
         templates={templates} // <-- Veri deposunu tabloya gönderdik
-        onAdd={() => setIsAdding(true)}
+        onAdd={() => {
+          setEditingTemplate(null);
+          setIsAdding(true);
+        }}
+        onEdit={(choosenRow) => {
+          setEditingTemplate(choosenRow);
+          setIsAdding(true);
+        }}
       />
     </div>
   );

@@ -15,10 +15,12 @@ import {
 } from "react-icons/lu";
 
 // onBack prop'u, geri butonuna basıldığında bir önceki sayfaya dönmemizi sağlayacak.
-const AddTemplate = ({ onBack, onSave }) => {
-  const [template, setTemplate] = useState("Receipts");
-  const [paperSize, setPaperSize] = useState("3-inch (80mm)");
-  const [elements, setElements] = useState([]);
+const AddTemplate = ({ onBack, onSave, initialData }) => {
+  const [template, setTemplate] = useState(initialData?.type || "Receipts");
+  const [paperSize, setPaperSize] = useState(
+    initialData?.size || "3-inch (80mm)",
+  );
+  const [elements, setElements] = useState(initialData?.designData || []);
   const [selectedId, setSelectedId] = useState(null);
 
   // ÖNİZLEME MODU STATE'İ
@@ -151,7 +153,9 @@ const AddTemplate = ({ onBack, onSave }) => {
           <Button variant="link" className="text-dark p-0" onClick={onBack}>
             <LuArrowLeft size={24} />
           </Button>
-          <h4 className="mb-0 fw-bold">Add New Template</h4>
+          <h4 className="mb-0 fw-bold">
+            {initialData ? "Edit Template" : "Add New Template"}
+          </h4>
         </div>
         <div>
           <Button
