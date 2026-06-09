@@ -66,6 +66,40 @@ const AddTemplate = ({ onBack }) => {
     setElements((prev) => [...prev, newElement]);
   }
 
+  function addImageElement() {
+    const newElement = {
+      id: Date.now(),
+      type: "image",
+      url: "https://placehold.co/150x150/e2e8f0/475569?text=Logo",
+      width: "100%",
+      align: "center",
+    };
+    setElements((prev) => [...prev, newElement]);
+  }
+
+  function addBarcodeElement() {
+    const newElement = {
+      id: Date.now(),
+      type: "barcode",
+      content: "123456789012",
+      height: "50px",
+    };
+    setElements((prev) => [...prev, newElement]);
+  }
+
+  function add2ColumnElement() {
+    const newElement = {
+      id: Date.now(),
+      type: "2-column",
+      col1: "Item Name", // 1. Kolonun metni
+      col2: "$0.00", // 2. Kolonun metni
+      col1Align: "left", // 1. Kolon sola yaslı
+      col2Align: "right", // 2. Kolon sağa yaslı
+      isBold: false, // Yazılar kalın mı?
+    };
+    setElements((prev) => [...prev, newElement]);
+  }
+
   return (
     // Container fluid ile ekranın tamamını yatayda kullanıyoruz.
     <Container fluid className="p-0">
@@ -151,6 +185,7 @@ const AddTemplate = ({ onBack }) => {
                 variant="light"
                 size="sm"
                 className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+                onClick={addImageElement}
               >
                 <LuImage size={16} /> Image
               </Button>
@@ -158,6 +193,7 @@ const AddTemplate = ({ onBack }) => {
                 variant="light"
                 size="sm"
                 className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+                onClick={addBarcodeElement}
               >
                 <LuBarcode size={16} /> Barcode
               </Button>
@@ -178,6 +214,7 @@ const AddTemplate = ({ onBack }) => {
                 variant="light"
                 size="sm"
                 className="border d-flex justify-content-center align-items-center gap-2 text-dark bg-white"
+                onClick={add2ColumnElement}
               >
                 <LuColumns2 size={16} /> 2 Column
               </Button>
@@ -253,6 +290,76 @@ const AddTemplate = ({ onBack }) => {
                     </div>
                   );
                 }
+
+                if (el.type === "image") {
+                  return (
+                    <div
+                      key={el.id}
+                      onClick={() => setSelectedId(el.id)}
+                      className={`mb-2 p-1 rounded d-flex justify-content-
+                    ${
+                      el.align === "center"
+                        ? "center"
+                        : el.align === "right"
+                          ? "end"
+                          : "start"
+                    } 
+                    ${selectedId === el.id ? "border border-primary" : ""}`}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={el.url}
+                        alt="Uploaded"
+                        style={{ width: el.width, maxWidth: "100%" }}
+                      />
+                    </div>
+                  );
+                }
+
+                if (el.type === "barcode") {
+                  return (
+                    <div
+                      key={el.id}
+                      onClick={() => setSelectedId(el.id)}
+                      className={`mb-2 p-1 rounded text-center ${selectedId === el.id ? "border border-primary" : ""}`}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {/* Şimdilik barkodu temsil eden sahte bir CSS deseni gösteriyoruz */}
+                      <div
+                        style={{
+                          margin: "0 auto",
+                          width: "90%",
+                          height: el.height,
+                          background:
+                            "repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 4px, #000 4px, #000 5px, #fff 5px, #fff 8px)",
+                        }}
+                      ></div>
+                      <small className="d-block mt-1 fw-bold">
+                        {el.content}
+                      </small>
+                    </div>
+                  );
+                }
+
+                if (el.type === "2-column") {
+                  return (
+                    <div
+                      key={el.id}
+                      onClick={() => setSelectedId(el.id)}
+                      className={`mb-2 p-1 rounded d-flex justify-content-between ${
+                        selectedId === el.id ? "border border-primary" : ""
+                      }`}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: el.isBold ? "bold" : "normal",
+                      }}
+                    >
+                      <span style={{ textAlign: el.col1Align }}>{el.col1}</span>
+                      <span style={{ textAlign: el.col2Align }}>{el.col2}</span>
+                    </div>
+                  );
+                }
+
                 return (
                   <div
                     key={el.id}
@@ -271,90 +378,6 @@ const AddTemplate = ({ onBack }) => {
                 );
               })}
               {/* 1. Fiş Başlığı (Çerçeve İçinde) */}
-              <div className="border border-dark text-center fw-bold fs-5 py-2 mb-3 rounded-1">
-                International Foods
-              </div>
-
-              {/* 2. Adres Bilgileri */}
-              <div
-                className="text-center text-muted mb-3"
-                style={{ fontSize: "12px", lineHeight: "1.5" }}
-              >
-                Cedar Park
-                <br />
-                851 S Bell Blvd, Cedar Park, TX 78613
-                <br />
-                (512) 215-8579
-              </div>
-
-              {/* Kesik Çizgi (<hr> etiketi) */}
-              <hr
-                className="text-secondary"
-                style={{ borderStyle: "dashed", opacity: 0.5 }}
-              />
-
-              {/* 3. Tablo Başlıkları (Sola, Ortaya, Sağa yaslı) */}
-              <div
-                className="d-flex justify-content-between text-muted mb-3"
-                style={{ fontSize: "12px" }}
-              >
-                <span>{"{Item}"}</span>
-                <span>{"{Quantity}"}</span>
-                <span>{"{$Price}"}</span>
-              </div>
-
-              <hr
-                className="text-secondary"
-                style={{ borderStyle: "dashed", opacity: 0.5 }}
-              />
-
-              {/* 4. Toplamlar (Subtotal, Tax, Total) */}
-              <div
-                className="d-flex flex-column gap-2 mb-3"
-                style={{ fontSize: "12px" }}
-              >
-                <div className="d-flex justify-content-between text-muted">
-                  <span>SUBTOTAL</span>
-                  <span>{"{$SubTotal}"}</span>
-                </div>
-                <div className="d-flex justify-content-between text-muted">
-                  <span>TAX</span>
-                  <span>{"{$TAX}"}</span>
-                </div>
-                <div className="d-flex justify-content-between fw-bold text-dark mt-1">
-                  <span>TOTAL</span>
-                  <span>{"{$TOTAL}"}</span>
-                </div>
-              </div>
-
-              <hr
-                className="text-secondary"
-                style={{ borderStyle: "dashed", opacity: 0.5 }}
-              />
-
-              {/* 5. Teşekkür Mesajı */}
-              <div
-                className="text-center fw-bold my-4"
-                style={{ fontSize: "14px" }}
-              >
-                Thank You For Shopping !
-              </div>
-
-              <hr
-                className="text-secondary"
-                style={{ borderStyle: "dashed", opacity: 0.5 }}
-              />
-
-              {/* 6. Barkod (Sahte CSS Barkod Hilesi) */}
-              <div
-                className="mt-4 mx-auto"
-                style={{
-                  width: "90%",
-                  height: "50px",
-                  background:
-                    "repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 4px, #000 4px, #000 5px, #fff 5px, #fff 8px)",
-                }}
-              ></div>
             </div>
           </div>
         </Col>
@@ -367,137 +390,210 @@ const AddTemplate = ({ onBack }) => {
             <h6 className="fw-bold mb-1">Properties</h6>
             <p className="text-muted small mb-4">Manage element properties</p>
 
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-medium small mb-1">
-                Content *
-              </Form.Label>
-              <Form.Control
-                size="sm"
-                type="text"
-                value={selectedElement?.content ?? ""}
-                onChange={(e) =>
-                  updateSelectedElement("content", e.target.value)
-                }
-                disabled={!selectedElement}
-                placeholder={
-                  selectedElement ? "Edit content" : "Select an element to edit"
-                }
-                className="shadow-none text-muted mb-1"
-              />
-              <Form.Text className="text-muted" style={{ fontSize: "11px" }}>
-                Use variables :<br />
-                {"{Store_Name}"}, {"{Date}"}, {"{Time}"}, {"{Item}"} etc.
-              </Form.Text>
-            </Form.Group>
-
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-medium small mb-1">
-                Font Size *
-              </Form.Label>
-              <Form.Select
-                size="sm"
-                className="shadow-none text-muted"
-                value={selectedElement?.fontSize ?? "16px"}
-                onChange={(e) =>
-                  updateSelectedElement("fontSize", e.target.value)
-                }
-                disabled={!selectedElement}
-              >
-                <option value="20px">20px</option>
-                <option value="16px">16px</option>
-                <option value="14px">14px</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-medium small mb-1">Style *</Form.Label>
-              <div className="d-flex gap-2">
-                {/* w-50: Her buton satırın %50'sini kaplar */}
-                <Button
-                  variant={selectedElement?.isBold ? "dark" : "light"}
-                  size="sm"
-                  className="w-50 fw-medium"
-                  onClick={() =>
-                    updateSelectedElement("isBold", !selectedElement?.isBold)
-                  }
-                  disabled={!selectedElement}
-                >
-                  B Bold
-                </Button>
-                <Button
-                  variant={selectedElement?.isItalic ? "dark" : "light"}
-                  size="sm"
-                  className="w-50 fw-medium "
-                  disabled={!selectedElement}
-                  onClick={() =>
-                    updateSelectedElement(
-                      "isItalic",
-                      !selectedElement?.isItalic,
-                    )
-                  }
-                >
-                  <span className="fst-italic">I</span> Italic
-                </Button>
+            {!selectedElement ? (
+              <div className="text-center text-muted my-auto px-2">
+                <p className="small">Choose any item for editing</p>
               </div>
-            </Form.Group>
+            ) : (
+              <div className="d-flex flex-column gap-3">
+                {selectedElement.type === "text" && (
+                  <>
+                    <Form.Group className="mb-4">
+                      <Form.Label className="fw-medium small mb-1">
+                        Content *
+                      </Form.Label>
+                      <Form.Control
+                        size="sm"
+                        type="text"
+                        value={selectedElement?.content ?? ""}
+                        onChange={(e) =>
+                          updateSelectedElement("content", e.target.value)
+                        }
+                        disabled={!selectedElement}
+                        placeholder={
+                          selectedElement
+                            ? "Edit content"
+                            : "Select an element to edit"
+                        }
+                        className="shadow-none text-muted mb-1"
+                      />
+                      <Form.Text
+                        className="text-muted"
+                        style={{ fontSize: "11px" }}
+                      >
+                        Use variables :<br />
+                        {"{Store_Name}"}, {"{Date}"}, {"{Time}"}, {"{Item}"}{" "}
+                        etc.
+                      </Form.Text>
+                    </Form.Group>
 
-            <Form.Group className="mb-5">
-              <Form.Label className="fw-medium small mb-1">
-                Alignment *
-              </Form.Label>
-              <div className="d-flex gap-2">
-                {/* flex-fill: Alanı eşit paylaşmak için butonların şişmesini sağlar */}
-                <Button
-                  size="sm"
-                  variant={
-                    selectedElement?.textAlign === "left" ? "dark" : "light"
-                  }
-                  className="flex-fill"
-                  disabled={!selectedElement}
-                  onClick={() => updateSelectedElement("textAlign", "left")}
-                >
-                  <LuAlignLeft size={16} />
-                </Button>
-                <Button
-                  size="sm"
-                  variant={
-                    selectedElement?.textAlign === "center" ? "dark" : "light"
-                  }
-                  className="flex-fill"
-                  disabled={!selectedElement}
-                  onClick={() => updateSelectedElement("textAlign", "center")}
-                >
-                  <LuAlignCenter size={16} />
-                </Button>
-                <Button
-                  size="sm"
-                  variant={
-                    selectedElement?.textAlign === "right" ? "dark" : "light"
-                  }
-                  className="flex-fill"
-                  disabled={!selectedElement}
-                  onClick={() => updateSelectedElement("textAlign", "right")}
-                >
-                  <LuAlignRight size={16} />
-                </Button>
+                    <Form.Group className="mb-4">
+                      <Form.Label className="fw-medium small mb-1">
+                        Font Size *
+                      </Form.Label>
+                      <Form.Select
+                        size="sm"
+                        className="shadow-none text-muted"
+                        value={selectedElement?.fontSize ?? "16px"}
+                        onChange={(e) =>
+                          updateSelectedElement("fontSize", e.target.value)
+                        }
+                        disabled={!selectedElement}
+                      >
+                        <option value="20px">20px</option>
+                        <option value="16px">16px</option>
+                        <option value="14px">14px</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label className="fw-medium small mb-1">
+                        Style *
+                      </Form.Label>
+                      <div className="d-flex gap-2">
+                        {/* w-50: Her buton satırın %50'sini kaplar */}
+                        <Button
+                          variant={selectedElement?.isBold ? "dark" : "light"}
+                          size="sm"
+                          className="w-50 fw-medium"
+                          onClick={() =>
+                            updateSelectedElement(
+                              "isBold",
+                              !selectedElement?.isBold,
+                            )
+                          }
+                          disabled={!selectedElement}
+                        >
+                          B Bold
+                        </Button>
+                        <Button
+                          variant={selectedElement?.isItalic ? "dark" : "light"}
+                          size="sm"
+                          className="w-50 fw-medium "
+                          disabled={!selectedElement}
+                          onClick={() =>
+                            updateSelectedElement(
+                              "isItalic",
+                              !selectedElement?.isItalic,
+                            )
+                          }
+                        >
+                          <span className="fst-italic">I</span> Italic
+                        </Button>
+                      </div>
+                    </Form.Group>
+
+                    <Form.Group className="mb-5">
+                      <Form.Label className="fw-medium small mb-1">
+                        Alignment *
+                      </Form.Label>
+                      <div className="d-flex gap-2">
+                        {/* flex-fill: Alanı eşit paylaşmak için butonların şişmesini sağlar */}
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement?.textAlign === "left"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="flex-fill"
+                          disabled={!selectedElement}
+                          onClick={() =>
+                            updateSelectedElement("textAlign", "left")
+                          }
+                        >
+                          <LuAlignLeft size={16} />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement?.textAlign === "center"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="flex-fill"
+                          disabled={!selectedElement}
+                          onClick={() =>
+                            updateSelectedElement("textAlign", "center")
+                          }
+                        >
+                          <LuAlignCenter size={16} />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement?.textAlign === "right"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="flex-fill"
+                          disabled={!selectedElement}
+                          onClick={() =>
+                            updateSelectedElement("textAlign", "right")
+                          }
+                        >
+                          <LuAlignRight size={16} />
+                        </Button>
+                      </div>
+                    </Form.Group>
+                  </>
+                )}
+                {selectedElement.type === "divider" && (
+                  <div className="text-center text-muted my-4">
+                    <p className="small">
+                      No adjustible properties for divider.
+                    </p>
+                  </div>
+                )}
+
+                {selectedElement.type === "2-column" && (
+                  <>
+                    <Form.Group className="mb-3">
+                      <Form.Label className="fw-medium small mb-1">
+                        Left Column
+                      </Form.Label>
+                      <Form.Control
+                        size="m"
+                        type="text"
+                        value={selectedElement.col1 ?? ""}
+                        onChange={(e) =>
+                          updateSelectedElement("col1", e.target.value)
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label className="fw-medium small mb-1">
+                        Right Column
+                      </Form.Label>
+                      <Form.Control
+                        size="m"
+                        type="text"
+                        value={selectedElement.col2 ?? ""}
+                        onChange={(e) =>
+                          updateSelectedElement("col2", e.target.value)
+                        }
+                      />
+                    </Form.Group>
+                  </>
+                )}
+
+                {/* mt-auto (Margin-Top Auto): Bu çok önemlidir. Kendisinden üstte ne kadar boşluk varsa hepsini ittirerek bu grubu EN ALTA yapıştırır! */}
+                <div className="mt-auto d-flex flex-column gap-2">
+                  <Button
+                    style={{ backgroundColor: "#1e8f81", border: "none" }}
+                    className="d-flex justify-content-center align-items-center gap-2 fw-medium py-2"
+                  >
+                    <LuSave size={16} /> Save Template
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="border d-flex justify-content-center align-items-center gap-2 fw-medium bg-white text-dark py-2"
+                  >
+                    <LuEye size={16} /> Preview Template
+                  </Button>
+                </div>
               </div>
-            </Form.Group>
-
-            {/* mt-auto (Margin-Top Auto): Bu çok önemlidir. Kendisinden üstte ne kadar boşluk varsa hepsini ittirerek bu grubu EN ALTA yapıştırır! */}
-            <div className="mt-auto d-flex flex-column gap-2">
-              <Button
-                style={{ backgroundColor: "#1e8f81", border: "none" }}
-                className="d-flex justify-content-center align-items-center gap-2 fw-medium py-2"
-              >
-                <LuSave size={16} /> Save Template
-              </Button>
-              <Button
-                variant="light"
-                className="border d-flex justify-content-center align-items-center gap-2 fw-medium bg-white text-dark py-2"
-              >
-                <LuEye size={16} /> Preview Template
-              </Button>
-            </div>
+            )}
           </div>
         </Col>
       </Row>
