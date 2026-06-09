@@ -18,8 +18,8 @@ const TemplateList = ({ templates, onAdd }) => {
 
     const tabMatch =
       activeTab === "All" ||
-      (activeTab === "Receipts" && item.type === "Receipt") ||
-      (activeTab === "Labels" && item.type === "Label");
+      (activeTab === "Receipts" && item.type === "Receipts") ||
+      (activeTab === "Labels" && item.type === "Labels");
 
     return statusMatch && tabMatch;
   });

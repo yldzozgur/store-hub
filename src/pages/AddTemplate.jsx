@@ -15,7 +15,7 @@ import {
 } from "react-icons/lu";
 
 // onBack prop'u, geri butonuna basıldığında bir önceki sayfaya dönmemizi sağlayacak.
-const AddTemplate = ({ onBack }) => {
+const AddTemplate = ({ onBack, onSave }) => {
   const [template, setTemplate] = useState("Receipts");
   const [paperSize, setPaperSize] = useState("3-inch (80mm)");
   const [elements, setElements] = useState([]);
@@ -131,11 +131,15 @@ const AddTemplate = ({ onBack }) => {
       designElements: elements,
       createdAt: new Date().toLocaleString(),
     };
-    console.log(
-      "Here are the details of the saving screen:",
-      finalTemplateData,
-    );
-    alert("Changes saved successfully!");
+    if (onSave) {
+      onSave(finalTemplateData);
+      console.log(
+        "Here are the details of the saving screen:",
+        finalTemplateData,
+      );
+      alert("Changes saved successfully!");
+    }
+
     onBack();
   }
 
