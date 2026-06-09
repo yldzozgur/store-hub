@@ -191,6 +191,7 @@ const AddTemplate = ({ onBack, onSave, initialData }) => {
                 </Form.Label>
                 <Form.Select size="sm" className="shadow-none text-muted">
                   <option>Default Receipt</option>
+                  <option>Label</option>
                 </Form.Select>
               </Form.Group>
 
