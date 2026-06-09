@@ -346,7 +346,7 @@ const AddTemplate = ({ onBack }) => {
                     <div
                       key={el.id}
                       onClick={() => setSelectedId(el.id)}
-                      className={`mb-2 p-1 rounded d-flex justify-content-between ${
+                      className={`mb-2 p-1 rounded d-flex w-100 ${
                         selectedId === el.id ? "border border-primary" : ""
                       }`}
                       style={{
@@ -354,8 +354,12 @@ const AddTemplate = ({ onBack }) => {
                         fontWeight: el.isBold ? "bold" : "normal",
                       }}
                     >
-                      <span style={{ textAlign: el.col1Align }}>{el.col1}</span>
-                      <span style={{ textAlign: el.col2Align }}>{el.col2}</span>
+                      <div className="w-50" style={{ textAlign: el.col1Align }}>
+                        {el.col1}
+                      </div>
+                      <div className="w-50" style={{ textAlign: el.col2Align }}>
+                        {el.col2}
+                      </div>
                     </div>
                   );
                 }
@@ -553,26 +557,90 @@ const AddTemplate = ({ onBack }) => {
                         Left Column
                       </Form.Label>
                       <Form.Control
-                        size="m"
+                        size="sm"
                         type="text"
                         value={selectedElement.col1 ?? ""}
                         onChange={(e) =>
                           updateSelectedElement("col1", e.target.value)
                         }
+                        className="mb-2"
                       />
+                      <div className="d-flex gap-2">
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement.col1Align === "left"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="w-50"
+                          onClick={() =>
+                            updateSelectedElement("col1Align", "left")
+                          }
+                        >
+                          <LuAlignLeft size={16} />
+                          Left
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement.col1Align === "right"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="w-50"
+                          onClick={() =>
+                            updateSelectedElement("col1Align", "right")
+                          }
+                        >
+                          <LuAlignRight size={16} />
+                          Right
+                        </Button>
+                      </div>
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label className="fw-medium small mb-1">
                         Right Column
                       </Form.Label>
                       <Form.Control
-                        size="m"
+                        size="sm"
                         type="text"
                         value={selectedElement.col2 ?? ""}
                         onChange={(e) =>
                           updateSelectedElement("col2", e.target.value)
                         }
+                        className="mb-2"
                       />
+                      <div className="d-flex gap-2">
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement.col2Align === "left"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="w-50"
+                          onClick={() =>
+                            updateSelectedElement("col2Align", "left")
+                          }
+                        >
+                          <LuAlignLeft size={16} /> Left
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={
+                            selectedElement.col2Align === "right"
+                              ? "dark"
+                              : "light"
+                          }
+                          className="w-50"
+                          onClick={() =>
+                            updateSelectedElement("col2Align", "right")
+                          }
+                        >
+                          <LuAlignRight size={16} /> Right
+                        </Button>
+                      </div>
                     </Form.Group>
                   </>
                 )}
