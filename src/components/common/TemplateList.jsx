@@ -2,68 +2,8 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import { LuFileText, LuTag, LuFilter, LuPlus } from "react-icons/lu";
 import FilterModel from "./FilterModel";
-// Bu dosyada "şimdilik" gerçek veriyi temsil etmesi için örnek bir liste kullanıyoruz.
-// Daha sonra bu liste yerine API'den gelen veri kullanılabilir.
-const mockData = [
-  {
-    id: 1,
-    name: "Default Receipt",
-    type: "Receipt",
-    size: "3-inch (80mm)",
-    status: "Active",
-    devices: 4,
-    modified: "12/11/2025 12:09 pm",
-  },
-  {
-    id: 2,
-    name: "Minimal Receipt",
-    type: "Receipt",
-    size: "2-inch (58mm)",
-    status: "Active",
-    devices: 2,
-    modified: "12/01/2025 11:14 am",
-  },
-  {
-    id: 3,
-    name: "Detailed Receipt",
-    type: "Receipt",
-    size: "3-inch (80mm)",
-    status: "Inactive",
-    devices: 0,
-    modified: "11/07/2025 09:22 am",
-  },
-  {
-    id: 4,
-    name: "Product Label - Small",
-    type: "Label",
-    size: "40 x 30 mm",
-    status: "Active",
-    devices: 1,
-    modified: "11/06/2025 04:21 pm",
-  },
-  {
-    id: 5,
-    name: "Product Label - Medium",
-    type: "Label",
-    size: "50 x 30 mm",
-    status: "Active",
-    devices: 3,
-    modified: "11/06/2025 03:20 pm",
-  },
-  {
-    id: 6,
-    name: "Product Label - Large",
-    type: "Label",
-    size: "60 x 40 mm",
-    status: "Inactive",
-    devices: 0,
-    modified: "11/06/2025 02:18 pm",
-  },
-];
 
-// TemplateList isminde bir React component oluşturuyoruz.
-// Component, ekranda gösterilecek UI parçalarını üretir.
-const TemplateList = ({ onAdd }) => {
+const TemplateList = ({ templates, onAdd }) => {
   // activeTab: Kullanıcının hangi sekmede olduğunu tutar.
   // Başlangıçta her şeyi gösterelim diye "All" seçili.
   const [activeTab, setActiveTab] = React.useState("All");
@@ -71,7 +11,7 @@ const TemplateList = ({ onAdd }) => {
   const [selectedStatuses, setSelectedStatuses] = React.useState(["All"]);
   // activeTab değerine göre mockData içini filtreliyoruz.
   // Sonuç: filteredData, ekranda gösterilecek satırların listesi olur.
-  const filteredData = mockData.filter((item) => {
+  const filteredData = templates.filter((item) => {
     const statusMatch =
       selectedStatuses.includes("All") ||
       selectedStatuses.includes(item.status);
